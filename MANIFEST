@@ -1,0 +1,33 @@
+ChangeLog
+LICENSE
+MANIFEST			This list of files
+META.yml			Module meta-data (added by MakeMaker)
+Makefile.PL
+VFS.pm
+examples/downloader.pl
+genmaps.pl
+maps
+t/GnomeVFS.t
+t/GnomeVFSApplicationRegistry
+t/GnomeVFSAsync
+t/GnomeVFSDirectory.t
+t/GnomeVFSFileInfo.t
+t/GnomeVFSMime
+t/GnomeVFSOps.t
+t/GnomeVFSURI.t
+t/GnomeVFSUtils.t
+t/GnomeVFSXfer.t
+vfs.typemap
+vfs2perl.c
+vfs2perl.h
+xs/GnomeVFS.xs
+xs/GnomeVFSApplicationRegistry.xs
+xs/GnomeVFSAsync.xs
+xs/GnomeVFSDirectory.xs
+xs/GnomeVFSFileInfo.xs
+xs/GnomeVFSInit.xs
+xs/GnomeVFSMime.xs
+xs/GnomeVFSOps.xs
+xs/GnomeVFSURI.xs
+xs/GnomeVFSUtils.xs
+xs/GnomeVFSXfer.xs
