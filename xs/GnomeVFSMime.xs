@@ -15,10 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.6.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.9 2005/03/07 21:16:43 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
+
+/* So we get those functions that were deprecated after we bound them. */
+#undef GNOME_VFS_DISABLE_DEPRECATED
 
 /* ------------------------------------------------------------------------- */
 
@@ -525,9 +528,52 @@ gnome_vfs_mime_remove_from_all_applications (mime_type, ...)
     OUTPUT:
 	RETVAL
 
-##  void gnome_vfs_mime_application_list_free (GList *list) 
+#if VFS_CHECK_VERSION (2, 8, 0)
 
-##  void gnome_vfs_mime_component_list_free (GList *list) 
+##  GList *gnome_vfs_mime_get_all_desktop_entries (const char *mime_type)
+void
+gnome_vfs_mime_get_all_desktop_entries (mime_type)
+      GnomeVFSMimeType *mime_type
+    PREINIT:
+	GList *result = NULL, *i;
+    PPCODE:
+	result = gnome_vfs_mime_get_all_desktop_entries (mime_type);
+
+	for (i = result; i; i = i->next) {
+		if (i->data) {
+			XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+			g_free (i->data);
+		}
+	}
+
+	g_list_free (result);
+
+##  gchar *gnome_vfs_mime_get_default_desktop_entry (const char *mime_type)
+gchar_own *
+gnome_vfs_mime_get_default_desktop_entry (mime_type)
+      GnomeVFSMimeType *mime_type
+
+##  GnomeVFSMimeEquivalence gnome_vfs_mime_type_get_equivalence (const char *mime_type, const char *base_mime_type)
+GnomeVFSMimeEquivalence
+gnome_vfs_mime_get_equivalence (mime_type, base_mime_type)
+	GnomeVFSMimeType *mime_type
+	GnomeVFSMimeType *base_mime_type
+    CODE:
+	RETVAL = gnome_vfs_mime_type_get_equivalence (mime_type, base_mime_type);
+    OUTPUT:
+	RETVAL
+
+##  gboolean gnome_vfs_mime_type_is_equal (const char *a, const char *b)
+gboolean
+gnome_vfs_mime_is_equal (a, b)
+	GnomeVFSMimeType *a
+	GnomeVFSMimeType *b
+    CODE:
+	RETVAL = gnome_vfs_mime_type_is_equal (a, b);
+    OUTPUT:
+	RETVAL
+
+#endif
 
 # --------------------------------------------------------------------------- #
 
@@ -622,3 +668,27 @@ GnomeVFSMIMEMonitor *
 gnome_vfs_mime_monitor_get (class)
     C_ARGS:
 	/* void */
+
+# --------------------------------------------------------------------------- #
+
+MODULE = Gnome2::VFS::Mime	PACKAGE = Gnome2::VFS	PREFIX = gnome_vfs_
+ 
+##  char *gnome_vfs_get_mime_type (const char *text_uri)
+char_own *
+gnome_vfs_get_mime_type (class, text_uri)
+	const char *text_uri
+    C_ARGS:
+	text_uri
+
+##  const char *gnome_vfs_get_mime_type_for_data (gconstpointer data, int data_size)
+const char *
+gnome_vfs_get_mime_type_for_data (class, data)
+	SV *data
+    PREINIT:
+	STRLEN data_size;
+	gconstpointer real_data;
+    CODE:
+	real_data = SvPV (data, data_size);
+	RETVAL = gnome_vfs_get_mime_type_for_data (real_data, data_size);
+    OUTPUT:
+	RETVAL

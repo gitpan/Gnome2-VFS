@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.20.2.3 2004/06/28 18:19:03 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.26 2005/03/07 21:18:50 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -12,7 +12,7 @@ require DynaLoader;
 
 our @ISA = qw(DynaLoader);
 
-our $VERSION = '1.003';
+our $VERSION = '1.020';
 
 sub import {
   my $self = shift();
@@ -27,7 +27,7 @@ sub import {
   }
 }
 
-sub dl_load_flags { 0x01 }
+sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
 Gnome2::VFS -> bootstrap($VERSION);
 
@@ -152,7 +152,7 @@ Torsten Schoenfeld E<lt>kaffeetisch@web.deE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS)
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
 
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSFileInfo.xs,v 1.7 2003/11/26 17:35:43 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSFileInfo.xs,v 1.9 2005/02/10 21:21:17 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -101,7 +101,7 @@ newSVGnomeVFSFileInfo (GnomeVFSFileInfo *info)
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_CTIME, "ctime", newSViv (info->ctime));
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_SYMLINK_NAME, "symlink_name", newSVpv (info->symlink_name, PL_na));
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE, "mime_type", newSVpv (info->mime_type, PL_na));
-		
+
 		/* FIXME: what about GNOME_VFS_FILE_INFO_FIELDS_ACCESS? */
 	}
 
@@ -144,7 +144,7 @@ SvGnomeVFSFileInfo (SV *object)
 		VFS2PERL_FETCH_AND_CHECK (GNOME_VFS_FILE_INFO_FIELDS_CTIME, "ctime", info->ctime, SvIV (*value));
 		VFS2PERL_FETCH_AND_CHECK (GNOME_VFS_FILE_INFO_FIELDS_SYMLINK_NAME, "symlink_name", info->symlink_name, SvPV_nolen (*value));
 		VFS2PERL_FETCH_AND_CHECK (GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE, "mime_type", info->mime_type, SvPV_nolen (*value));
-		
+
 		/* FIXME: what about GNOME_VFS_FILE_INFO_FIELDS_ACCESS? */
 	}
 
@@ -154,6 +154,24 @@ SvGnomeVFSFileInfo (SV *object)
 /* ------------------------------------------------------------------------- */
 
 MODULE = Gnome2::VFS::FileInfo	PACKAGE = Gnome2::VFS::FileInfo	PREFIX = gnome_vfs_file_info_
+
+=for apidocs
+
+Creates a new GnomeVFSFileInfo object from I<hash_ref> for use with
+Gnome2::VFS::FileInfo::matches, for example.  Normally, you can always directly
+use a hash reference if you're asked for a GnomeVFSFileInfo.
+
+=cut
+GnomeVFSFileInfo *
+gnome_vfs_file_info_new (class, hash_ref)
+	SV *hash_ref
+    CODE:
+	/* All this really doesn't do much more than just bless the reference,
+	   because on the way out, the struct will be converted to a hash
+	   reference again.  Not really efficient, but future-safe. */
+	RETVAL = SvGnomeVFSFileInfo (hash_ref);
+    OUTPUT:
+	RETVAL
 
 ##  gboolean gnome_vfs_file_info_matches (const GnomeVFSFileInfo *a, const GnomeVFSFileInfo *b) 
 gboolean

@@ -2,21 +2,20 @@
 use strict;
 use Gnome2::VFS;
 
-use Gtk2 -init;
+use Cwd qw(cwd);
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSAsync,v 1.5.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSAsync,v 1.10 2004/08/15 21:03:08 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 1) :
+  (tests => 135) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
 
 ###############################################################################
 
-Gnome2::VFS::Async -> set_job_limit(3);
-is(Gnome2::VFS::Async -> get_job_limit(), 3);
+my $loop = Glib::MainLoop -> new();
 
 ###############################################################################
 
@@ -26,7 +25,7 @@ my $callback_close = sub {
   isa_ok($handle, "Gnome2::VFS::Async::Handle");
   is($result, "ok");
 
-  $handle -> cancel();
+  $loop -> quit();
 };
 
 my $callback_read = sub {
@@ -35,10 +34,20 @@ my $callback_read = sub {
   isa_ok($handle, "Gnome2::VFS::Async::Handle");
   is($result, "ok");
 
-  ok(defined($buffer));
-  ok($bytes_requested == $bytes_read);
+  is($buffer, "#!");
+  is($bytes_requested, 2);
+  is($bytes_read, 2);
 
   $handle -> close($callback_close);
+};
+
+my $callback_seek = sub {
+  my ($handle, $result) = @_;
+
+  isa_ok($handle, "Gnome2::VFS::Async::Handle");
+  is($result, "ok");
+
+  $handle -> read(2, $callback_read);
 };
 
 my $callback_open = sub {
@@ -47,10 +56,27 @@ my $callback_open = sub {
   isa_ok($handle, "Gnome2::VFS::Async::Handle");
   is($result, "ok");
 
-  $handle -> read(10, $callback_read);
+  if (Gnome2::VFS -> CHECK_VERSION(2, 6, 0)) {
+    $handle -> seek("start", 0, $callback_seek);
+  }
+  else {
+    $handle -> read(2, $callback_read);
+    ok(1);
+    ok(1);
+  }
 };
 
-###############################################################################
+my $callback_write = sub {
+  my ($handle, $result, $buffer, $bytes_requested, $bytes_written) = @_;
+
+  isa_ok($handle, "Gnome2::VFS::Async::Handle");
+  is($result, "ok");
+  is($buffer, "urgs\n");
+  is($bytes_requested, 5);
+  is($bytes_written, 5);
+
+  $handle -> close($callback_close);
+};
 
 my $callback_create = sub {
   my ($handle, $result) = @_;
@@ -58,32 +84,24 @@ my $callback_create = sub {
   isa_ok($handle, "Gnome2::VFS::Async::Handle");
   is($result, "ok");
 
-  $handle -> close($callback_close);
+  $handle -> write("urgs\n", 5, $callback_write);
 };
-
-###############################################################################
 
 my $callback_directory_open = sub {
   my ($handle, $result, $infos, $entries_read) = @_;
 
   isa_ok($handle, "Gnome2::VFS::Async::Handle");
+  is($result, "ok");
+  is($entries_read, 2);
 
-  if ($result eq "error-eof") {
-    $handle -> cancel();
-  }
-  else {
-    is($result, "ok");
-    is($entries_read, 2);
+  isa_ok($infos -> [0], "Gnome2::VFS::FileInfo");
+  isa_ok($infos -> [1], "Gnome2::VFS::FileInfo");
 
-    foreach (@{$infos}) {
-      isa_ok($_, "Gnome2::VFS::FileInfo");
-    }
-  }
+  $handle -> cancel();
+  $loop -> quit();
 };
 
-###############################################################################
-
-my $callback_file_info = sub {
+my $callback_get_file_info = sub {
   my ($handle, $infos) = @_;
 
   foreach (@{$infos}) {
@@ -92,10 +110,31 @@ my $callback_file_info = sub {
     isa_ok($_ -> { uri }, "Gnome2::VFS::URI");
   }
 
-  $handle -> cancel();
+  $loop -> quit();
 };
 
-###############################################################################
+my $callback_set_file_info = sub {
+  my ($handle, $result, $info) = @_;
+
+  isa_ok($handle, "Gnome2::VFS::Async::Handle");
+  is($result, "ok");
+
+  is($info -> { name }, "bla");
+  is_deeply($info -> { permissions }, [qw(user-read user-write)]);
+
+  $loop -> quit();
+};
+
+my $callback_find_directory = sub {
+  my ($handle, $results) = @_;
+
+  foreach (@{$results}) {
+    is($_ -> { result }, "ok");
+    isa_ok($_ -> { uri }, "Gnome2::VFS::URI");
+  }
+
+  $loop -> quit();
+};
 
 my $callback_progress_sync = sub {
   my ($info) = @_;
@@ -120,36 +159,102 @@ my $callback_progress_update = sub {
 
   isa_ok($handle, "Gnome2::VFS::Async::Handle");
   isa_ok($info, "HASH");
-};
 
-###############################################################################
-
-my $callback_find_directory = sub {
-  my ($handle, $results) = @_;
-
-  foreach (@{$results}) {
-    if ($_ -> { result } eq "ok") {
-      isa_ok($_ -> { uri }, "Gnome2::VFS::URI");
-    }
+  if ($info -> { phase } eq "phase-completed") {
+    $loop -> quit();
   }
-
-  $handle -> cancel();
 };
 
 ###############################################################################
 
-foreach (Gnome2::VFS::Async -> open("/usr/bin/perl", qw(read), 0, $callback_open),
-         Gnome2::VFS::Async -> open_uri(Gnome2::VFS::URI -> new("/usr/bin/perl"), qw(read), 0, $callback_open),
-         Gnome2::VFS::Async -> create("/tmp/bla", [qw(read write)], 1, 0666, 0, $callback_create),
-         Gnome2::VFS::Async -> create_uri(Gnome2::VFS::URI -> new("/tmp/ble"), [qw(read write)], 1, 0666, 0, $callback_create),
-         Gnome2::VFS::Async -> create_symbolic_link(Gnome2::VFS::URI -> new("/tmp/bli"), "/usr/bin/perl", 0, $callback_close)) {
-  isa_ok($_, "Gnome2::VFS::Async::Handle");
-}
+my ($handle, $result);
 
 ###############################################################################
 
-Gnome2::VFS::Async -> load_directory("/tmp", qw(default), 2, 0, $callback_directory_open);
-Gnome2::VFS::Async -> load_directory_uri(Gnome2::VFS::URI -> new("/tmp"), qw(default), 2, 0, $callback_directory_open);
+$handle = Gnome2::VFS::Async -> open(cwd() . "/$0",
+                                     qw(read),
+                                     0,
+                                     $callback_open);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+$handle = Gnome2::VFS::Async -> open_uri(Gnome2::VFS::URI -> new(cwd() . "/$0"),
+                                         qw(read),
+                                         0,
+                                         $callback_open);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+$handle = Gnome2::VFS::Async -> create("/tmp/bla",
+                                       [qw(read write)],
+                                       1,
+                                       0666,
+                                       0,
+                                       $callback_create);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+$handle = Gnome2::VFS::Async -> create_uri(Gnome2::VFS::URI -> new("/tmp/ble"),
+                                           [qw(read write)],
+                                           1,
+                                           0666,
+                                           0,
+                                           $callback_create);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+# FIXME: this seems to block.  should we cancel the handle somewhere?
+# $handle = Gnome2::VFS::Async -> create_symbolic_link(Gnome2::VFS::URI -> new("/tmp/bli"),
+#                                                      "/usr/bin/perl",
+#                                                      0,
+#                                                      $callback_close);
+
+# isa_ok($handle, "Gnome2::VFS::Async::Handle");
+# $loop -> run();
+
+$handle = Gnome2::VFS::Async -> create("/tmp/bli",
+                                       [qw(read write)],
+                                       1,
+                                       0666,
+                                       0,
+                                       $callback_create);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+$handle = Gnome2::VFS::Async -> load_directory("/tmp",
+                                               qw(default),
+                                               2,
+                                               0,
+                                               $callback_directory_open);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+$handle = Gnome2::VFS::Async -> load_directory_uri(Gnome2::VFS::URI -> new("/tmp"),
+                                                   qw(default),
+                                                   2,
+                                                   0,
+                                                   $callback_directory_open);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
 
 ###############################################################################
 
@@ -157,49 +262,79 @@ my $files = [Gnome2::VFS::URI -> new("/tmp/bla"),
              Gnome2::VFS::URI -> new("/tmp/ble"),
              Gnome2::VFS::URI -> new("/tmp/bli")];
 
-Gnome2::VFS::Async -> get_file_info($files, qw(default), 0, $callback_file_info);
-Gnome2::VFS::Async -> find_directory($files, "desktop", 0, 1, 0777, 0, $callback_find_directory);
+$handle = Gnome2::VFS::Async -> get_file_info($files,
+                                              qw(default),
+                                              0,
+                                              $callback_get_file_info);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
 
 ###############################################################################
 
-my @source = (Gnome2::VFS::URI -> new("file:///tmp/bla"),
-              Gnome2::VFS::URI -> new("file:///tmp/ble"),
-              Gnome2::VFS::URI -> new("file:///tmp/bli"));
+$handle = Gnome2::VFS::Async -> set_file_info(Gnome2::VFS::URI -> new("/tmp/bla"),
+                                              { permissions => [qw(user-read user-write)] },
+                                              [qw(permissions)],
+                                              qw(default),
+                                              0,
+                                              $callback_set_file_info);
 
-my @destination = (Gnome2::VFS::URI -> new("file:///tmp/blaa"),
-                   Gnome2::VFS::URI -> new("file:///tmp/blee"),
-                   Gnome2::VFS::URI -> new("file:///tmp/blii"));
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
 
-my ($result, $handle) = Gnome2::VFS::Async -> xfer(\@source,
-                                                   \@destination,
-                                                   qw(default),
-                                                   qw(query),
-                                                   qw(query),
-                                                   0,
-                                                   $callback_progress_update,
-                                                   undef,
-                                                   $callback_progress_sync,
-                                                   undef);
+###############################################################################
+
+$handle = Gnome2::VFS::Async -> find_directory($files,
+                                               "desktop",
+                                               0,
+                                               1,
+                                               0777,
+                                               0,
+                                               $callback_find_directory);
+
+isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
+
+###############################################################################
+
+my @source = (Gnome2::VFS::URI -> new("/tmp/bla"),
+              Gnome2::VFS::URI -> new("/tmp/ble"),
+              Gnome2::VFS::URI -> new("/tmp/bli"));
+
+my @destination = (Gnome2::VFS::URI -> new("/tmp/blaa"),
+                   Gnome2::VFS::URI -> new("/tmp/blee"),
+                   Gnome2::VFS::URI -> new("/tmp/blii"));
+
+($result, $handle) = Gnome2::VFS::Async -> xfer(\@source,
+                                                \@destination,
+                                                qw(default),
+                                                qw(query),
+                                                qw(query),
+                                                0,
+                                                $callback_progress_update,
+                                                undef,
+                                                $callback_progress_sync,
+                                                undef);
 
 is($result, "ok");
 isa_ok($handle, "Gnome2::VFS::Async::Handle");
+$loop -> run();
 
 ###############################################################################
 
-Glib::Timeout -> add(2000, sub {
-  Gtk2 -> main_quit();
+Gnome2::VFS -> unlink("/tmp/bla");
+Gnome2::VFS -> unlink("/tmp/ble");
+Gnome2::VFS -> unlink("/tmp/bli");
 
-  Gnome2::VFS -> unlink("/tmp/bla");
-  Gnome2::VFS -> unlink("/tmp/ble");
-  Gnome2::VFS -> unlink("/tmp/bli");
+Gnome2::VFS -> unlink("/tmp/blaa");
+Gnome2::VFS -> unlink("/tmp/blee");
+Gnome2::VFS -> unlink("/tmp/blii");
 
-  Gnome2::VFS -> unlink("/tmp/blaa");
-  Gnome2::VFS -> unlink("/tmp/blee");
-  Gnome2::VFS -> unlink("/tmp/blii");
+###############################################################################
 
-  0;
-});
+Gnome2::VFS::Async -> set_job_limit(2);
+is(Gnome2::VFS::Async -> get_job_limit(), 2);
 
-Gtk2 -> main();
+###############################################################################
 
 Gnome2::VFS -> shutdown();

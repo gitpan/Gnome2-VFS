@@ -5,7 +5,7 @@ use Gnome2::VFS;
 use Config;
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.5.2.2 2004/03/27 17:37:46 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.10 2005/03/07 21:16:45 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 29) :
@@ -33,8 +33,9 @@ SKIP: {
   skip("resolve_relative, it changed in 2.4.0", 1)
     unless (Gnome2::VFS -> CHECK_VERSION(2, 4, 0));
 
-  skip("resolve_relative is currently broken on 64bit platforms", 1)
-    if ($Config{ archname } =~ m/^(ia64|x86_64|alpha)/);
+  skip("resolve_relative was broken on 64bit platforms", 1)
+    if ($Config{ archname } =~ m/^(ia64|x86_64|alpha)/ &&
+        not Gnome2::VFS -> CHECK_VERSION(2, 8, 0));
 
   is($uri -> resolve_relative("bla.html") -> to_string(), "http://www.freenet.de/bla.html");
 }

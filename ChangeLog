@@ -1,16 +1,130 @@
-2004/06/28 20:18 (+0200) kaffeetisch
+2005/03/07	kaffeetisch
 
-	* NEWS
-	* VFS.pm: Version 1.003.
+	* Makefile.PL, META.yml, NEWS, README, VFS.pm: Stable release
+	1.020.
 
-2004/06/25 16:47 (+0200) kaffeetisch
+2005/03/07	kaffeetisch
 
-	* vfs2perl.h
-	* Makefile.PL: Don't depend on Gtk2, since we actually don't need
-	to.  Instead, just include Glib's header, and add "-I build" to
-	the cflags.
+	* vfs2perl.c, vfs2per.h, t/GnomeVFSAddress.t, t/GnomeVFSDNSSD,
+	t/GnomeVFSDrive, t/GnomeVFSMime, t/GnomeVFSResolve.t,
+	t/GnomeVFSURI.t, t/GnomeVFSVolume, xs/GnomeVFSDrive.xs,
+	xs/GnomeVFSMime.xs, xs/GnomeVFSVolume.xs: Use stable releases in
+	all version checks.
 
-2004/06/25 16:09 (+0200) kaffeetisch
+	* t/GnomeVFSFileInfo.t: Mark failing test as TODO.
+
+2005/02/10 22:18 (+0100) kaffeetisch
+
+	* VFS.pm: Do it like all the other cool kids and alter
+	dl_load_flags() to avoid warnings on Darwin.
+
+	* xs/GnomeVFSAsync.xs, xs/GnomeVFSFileInfo.xs: Whitespace fixes.
+
+	* xs/GnomeVFSVolumeMonitor.xs: Add version guards around the
+	custom DESTROY so it's only included if gnome-vfs is older than
+	2.8.1.
+
+2004/10/24 11:55 (-0400) rwmcfa1
+
+	* MANIFEST.SKIP: updates
+
+	* perl-Gnome2-VFS.spec.in: new scheme that addresses x86_64 problems
+	found by Carl Nygard
+
+2004/09/25 21:14 (+0200) kaffeetisch
+
+	* doctypes: Add types for GnomeVFSApplication and
+	GnomeVFSMimeType.
+
+2004/09/15 12:31 (+0200) kaffeetisch
+
+	* xs/GnomeVFSVolumeMonitor.xs: Add a FIXME comment with a
+	reference to the relevant bug to the DESTROY workaround.
+
+2004/08/16 00:03 (+0200) kaffeetisch
+
+	* Makefile.PL, NEWS, README, VFS.pm: Version 1.011.
+
+2004/08/15 23:01 (+0200) kaffeetisch
+
+	* t/GnomeVFSAsync: Don't use seek if it's not available.
+
+2004/08/15 03:01 (+0200) kaffeetisch
+
+	* t/GnomeVFSAsync: Completely rewrite this to actually work and
+	make sense.
+
+	* xs/GnomeVFSDrive.xs, xs/GnomeVFSVolume.xs: Free callback
+	directly after it was invoked.
+
+	* xs/GnomeVFSVolumeMonitor.xs: Keep a ref on the monitor and never
+	release it to avoid segfaults that occur when a monitor is freed
+	after gnome-vfs has already been shut down.
+
+2004/08/08 15:38 (+0200) kaffeetisch
+
+	* NEWS, README, VFS.pm: Version 1.010.
+
+2004/08/08 15:15 (+0200) kaffeetisch
+
+	* Makefile.PL: Depend on Glib 1.053.
+
+	* maps-2.8, t/GnomeVFSMime, xs/GnomeVFS.xs, xs/GnomeVFSMime.xs:
+	Bind and test Gnome2::VFS::Mime::Type::get_all_desktop_entries,
+	::get_default_desktop_entry, ::is_equal, and
+	Gnome2::VFS::get_mime_type_for_data.
+
+2004/07/29 19:12 (+0200) kaffeetisch
+
+	* MANIFEST, vfs2perl.c, vfs2perl.h, t/GnomeVFSAddress.t,
+	t/GnomeVFSDNSSD, t/GnomeVFSDrive, t/GnomeVFSResolve.t,
+	t/GnomeVFSVolume, t/GnomeVFSVolumeMonitor, xs/GnomeVFSAddress.xs,
+	xs/GnomeVFSDNSSD.xs, xs/GnomeVFSDrive.xs, xs/GnomeVFSResolve.xs,
+	xs/GnomeVFSVolume.xs, xs/GnomeVFSVolumeMonitor.xs: Bind and test
+	GnomeVFSAddress, GnomeVFSDNSSD, GnomeVFSDrive, GnomeVFSResolve,
+	GnomeVFSVolume, and GnomeVFSVolumeMonitor.  Nifty stuff!
+
+	* maps, maps-2.0, maps-2.6, maps-2.8, xs_files-2.0, xs_files-2.6,
+	xs_files-2.8, Makefile.PL: Implement loading of xs_files and maps
+	files based on the version of gnome-vfs.  Require Glib 1.052.
+	(1.053 actually, but it has not been released yet.)
+
+	* NEWS, VFS.pm: Merge changes from the stable-1-00 branch.
+
+	* t/GnomeVFS.t: Test Gnome2::VFS::result_to_string.
+
+	* t/GnomeVFSApplicationRegistry: Test a bit more stuff, and then
+	just reload the database to avoid permanent changes.
+
+	* t/GnomeVFSURI.t: Enable the resolve_relative test on 64 bit
+	platforms if gnome-vfs is recent enough.
+
+	* vfs.typemap, xs/GnomeVFS.xs: Use IVs to represent
+	GnomeVFSFileOffset instead of UVs -- offsets are signed.  Also
+	switch to T_UV and T_IV instead of the generic typemap for
+	GnomeVFSFileSize and GnomeVFSFileOffset respectively for
+	performance reasons.
+
+	* t/GnomeVFSAsync.t, xs/GnomeVFSAsync.xs: Use the same helpers for
+	the open and for set_file_info callback.  Bind and test
+	gnome_vfs_async_set_file_info and gnome_vfs_async_seek.
+
+	* t/GnomeVFSFileInfo.t, xs/GnomeVFSFileInfo.xs: Provide and test a
+	constructor for GnomeVFSFileInfo structures.
+
+	* t/GnomeVFSOps.t, xs/GnomeVFSOps.xs: Bind and test
+	gnome_vfs_set_file_info and gnome_vfs_set_file_info_uri.
+
+	* xs/GnomeVFSUtils.xs: Use the new char_own typemap to get rid of
+	all those CLEANUP sections.
+
+2004/06/28 19:55 (+0200) kaffeetisch
+
+	Merge from the stable-1-00 branch.
+
+	* Makefile.PL: Add guards around our custom GType definitions to
+	avoid compiler warnings that occur when Gnome2::VFS is not
+	recompiled after libgnomevfs was updated.
 
 	* t/GnomeVFSDirectory.t: Fix a test bug found by david d zuhn.
 
@@ -18,23 +132,21 @@
 	* xs/GnomeVFSUtils.xs: Patch by muppet fixes a crash found by
 	Gavin.
 
-2004/06/13 22:05 (+0200) kaffeetisch
-
-	* NEWS
-	* VFS.pm: Version 1.002.
-
-2004/06/13 21:52 (+0200) kaffeetisch
-
-	* Makefile.PL: Add guards around our custom GType definitions to
-	avoid compiler warnings that occur when Gnome2::VFS is not
-	recompiled after libgnomevfs was updated.
+	* vfs2perl.h
+	* Makefile.PL: Don't depend on Gtk2, since we actually don't need
+	to.  Instead, just include Glib's header, and add "-I build" to
+	the cflags.
 
 2004/03/29 17:15 (+0100) kaffeetisch
+
+	Merge from the stable-1-00 branch.
 
 	* NEWS
 	* VFS.pm: Version 1.001.
 
 2004/03/27 18:44 (+0100) kaffeetisch
+
+	Merge from the stable-1-00 branch.
 
 	* t/GnomeVFSURI.t: Skip the resolve_relative test on 64bit
 	platforms since it causes segfaults.  (Found by Marc Brockschmidt)
@@ -46,6 +158,8 @@
 	CODE and OUTPUT sections.
 
 2004/03/27 17:24 (+0100) kaffeetisch
+
+	Merge from the stable-1-00 branch.
 
 	* t/GnomeVFSAsync
 	* t/GnomeVFSDirectory.t

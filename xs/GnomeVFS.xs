@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.19 2004/03/03 19:24:29 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.21 2004/08/08 13:19:06 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -37,13 +37,13 @@ SvGnomeVFSFileSize (SV *size)
 SV *
 newSVGnomeVFSFileOffset (GnomeVFSFileOffset offset)
 {
-	return newSVuv (offset);
+	return newSViv (offset);
 }
 
 GnomeVFSFileOffset
 SvGnomeVFSFileOffset (SV *offset)
 {
-	return SvUV (offset);
+	return SvIV (offset);
 }
 
 /* ------------------------------------------------------------------------- */
@@ -238,19 +238,3 @@ gnome_vfs_result_to_string (class, result)
 	GnomeVFSResult result
     C_ARGS:
 	result
- 
-##  char *gnome_vfs_get_mime_type (const char *text_uri)
-char *
-gnome_vfs_get_mime_type (class, text_uri)
-	const char *text_uri
-    C_ARGS:
-	text_uri
-    CLEANUP:
-	g_free (RETVAL);
-
-# FIXME: implement.
-###  const char *gnome_vfs_get_mime_type_for_data (gconstpointer data, int data_size)
-#const char *
-#gnome_vfs_get_mime_type_for_data (data, data_size)
-#	gconstpointer data
-#	int data_size

@@ -4,10 +4,10 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSMime,v 1.3.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSMime,v 1.7 2005/03/07 21:16:45 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 11) :
+  (tests => 16) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -21,7 +21,7 @@ my $type = Gnome2::VFS::Mime::Type -> new("text/html");
 my $application = $type -> get_default_application();
 
 SKIP: {
-  skip("you don't seem to have a default application associated with text/html", 5)
+  skip("you don't seem to have a default application associated with text/html", 8)
     unless (defined($application));
 
   isa_ok($application, "Gnome2::VFS::Mime::Application");
@@ -39,7 +39,10 @@ SKIP: {
   isa_ok(($type -> get_all_applications())[0], "Gnome2::VFS::Mime::Application");
 }
 
-isa_ok(Gnome2::VFS::Mime::Application -> new_from_id("xmms"), "Gnome2::VFS::Mime::Application");
+TODO: {
+  local $TODO = "hrm";
+  isa_ok(Gnome2::VFS::Mime::Application -> new_from_id("epiphany"), "Gnome2::VFS::Mime::Application");
+}
 
 # $type -> get_icon();
 # $type -> set_icon(...);
@@ -67,7 +70,19 @@ isa_ok(Gnome2::VFS::Mime::Application -> new_from_id("xmms"), "Gnome2::VFS::Mime
 # is($type -> set_default_action_type("none"), "ok");
 # is($type -> get_default_action_type(), "none");
 
-is(Gnome2::VFS -> get_mime_type("/usr/bin/perl"), "application/x-executable-binary");
+ok(defined Gnome2::VFS -> get_mime_type("/usr/bin/perl"));
+is(Gnome2::VFS -> get_mime_type_for_data("<html></html>"), "text/html");
+
+SKIP: {
+  skip("get_all_desktop_entries and get_default_desktop_entry are new in 2.8", 4)
+    unless (Gnome2::VFS -> CHECK_VERSION(2, 8, 0));
+
+  is($type -> get_all_desktop_entries(), undef);
+  is($type -> get_default_desktop_entry(), undef);
+
+  is($type -> get_equivalence($type), "identical");
+  is($type -> is_equal($type), 1);
+}
 
 ###############################################################################
 

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.19 2004/03/09 21:42:40 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.20 2004/07/29 17:36:03 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -199,6 +199,15 @@ gnome_vfs_remove_directory (class, text_uri)
 	const gchar *text_uri
     C_ARGS:
 	text_uri
+
+##  GnomeVFSResult gnome_vfs_set_file_info (const gchar *text_uri, GnomeVFSFileInfo *info, GnomeVFSSetFileInfoMask mask) 
+GnomeVFSResult
+gnome_vfs_set_file_info (class, text_uri, info, mask)
+	const gchar *text_uri
+	GnomeVFSFileInfo *info
+	GnomeVFSSetFileInfoMask mask
+    C_ARGS:
+	text_uri, info, mask
 
 # --------------------------------------------------------------------------- #
 
@@ -452,6 +461,17 @@ gnome_vfs_uri_remove_directory (uri)
     OUTPUT:
 	RETVAL
 
+##  GnomeVFSResult gnome_vfs_set_file_info_uri (GnomeVFSURI *uri, GnomeVFSFileInfo *info, GnomeVFSSetFileInfoMask mask) 
+GnomeVFSResult
+gnome_vfs_uri_set_file_info (uri, info, mask)
+	GnomeVFSURI *uri
+	GnomeVFSFileInfo *info
+	GnomeVFSSetFileInfoMask mask
+    CODE:
+	RETVAL = gnome_vfs_set_file_info_uri (uri, info, mask);
+    OUTPUT:
+	RETVAL
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Gnome2::VFS::Ops	PACKAGE = Gnome2::VFS::Monitor	PREFIX = gnome_vfs_monitor_
@@ -496,23 +516,6 @@ MODULE = Gnome2::VFS::Ops	PACKAGE = Gnome2::VFS::Monitor::Handle	PREFIX = gnome_
 GnomeVFSResult
 gnome_vfs_monitor_cancel (handle)
 	GnomeVFSMonitorHandle *handle
-
-# --------------------------------------------------------------------------- #
-
-# FIXME: why would you want to use these?
-###  GnomeVFSResult gnome_vfs_set_file_info_uri (GnomeVFSURI *uri, GnomeVFSFileInfo *info, GnomeVFSSetFileInfoMask mask) 
-#GnomeVFSResult
-#gnome_vfs_set_file_info_uri (uri, info, mask)
-#	GnomeVFSURI *uri
-#	GnomeVFSFileInfo *info
-#	GnomeVFSSetFileInfoMask mask
-
-###  GnomeVFSResult gnome_vfs_set_file_info (const gchar *text_uri, GnomeVFSFileInfo *info, GnomeVFSSetFileInfoMask mask) 
-#GnomeVFSResult
-#gnome_vfs_set_file_info (text_uri, info, mask)
-#	const gchar *text_uri
-#	GnomeVFSFileInfo *info
-#	GnomeVFSSetFileInfoMask mask
 
 # --------------------------------------------------------------------------- #
 

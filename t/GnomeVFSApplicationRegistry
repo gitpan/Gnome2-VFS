@@ -4,17 +4,16 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSApplicationRegistry,v 1.3.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSApplicationRegistry,v 1.6 2004/07/29 17:36:03 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 11) :
+  (tests => 12) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
+Gnome2::VFS::ApplicationRegistry -> reload();
 
 ###############################################################################
-
-Gnome2::VFS::ApplicationRegistry -> reload();
 
 ok(Gnome2::VFS::ApplicationRegistry -> get_applications());
 
@@ -26,25 +25,17 @@ ok($application -> get_keys());
 is($application -> peek_value("name"), "Terminal");
 is_deeply([$application -> get_bool_value("can_open_multiple_files")], [0, 1]);
 
-# FIXME: enable, but -> reload()?
-# $application -> remove_application();
-# $application -> set_value();
-# $application -> set_bool_value();
-# $application -> unset_key();
-# $application -> clear_mime_types();
-# $application -> add_mime_type();
-# $application -> remove_mime_type();
-
-# Gnome2::VFS::Application -> is_user_owned_application();
-# $application -> get_mime_application();
-# gnome_vfs_application_registry_save_mime_application();
-
-# Gnome2::VFS::ApplicationRegistry -> sync();
-# Gnome2::VFS::ApplicationRegistry -> shutdown();
-# Gnome2::VFS::ApplicationRegistry -> reload();
+$application -> set_value("name", "Terminal Bla");
+$application -> set_bool_value("can_open_multiple_files", 0);
+$application -> unset_key("name");
 
 ok($application -> get_mime_types());
 ok($application -> supports_mime_type(($application -> get_mime_types())[0]));
+
+$application -> add_mime_type("text/plain");
+$application -> remove_mime_type("text/plain");
+
+$application -> clear_mime_types();
 
 ok(not $application -> supports_uri_scheme("http"));
 
@@ -53,7 +44,12 @@ isa_ok($mime_application, "Gnome2::VFS::Mime::Application");
 ok(not $mime_application -> is_user_owned());
 $mime_application -> save();
 
+$application -> remove_application();
+
 ###############################################################################
+
+Gnome2::VFS::ApplicationRegistry -> reload();
+is(Gnome2::VFS::ApplicationRegistry -> sync(), "ok");
 
 Gnome2::VFS::ApplicationRegistry -> shutdown();
 Gnome2::VFS -> shutdown();

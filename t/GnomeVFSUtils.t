@@ -6,7 +6,7 @@ use Cwd qw(cwd);
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.11.2.3 2004/06/25 14:11:05 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.15 2004/06/28 18:00:13 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 30) :

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSAsync.xs,v 1.10 2003/12/31 07:33:40 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSAsync.xs,v 1.12 2005/02/10 21:21:16 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -34,7 +34,7 @@ vfs2perl_async_callbacks_add (GnomeVFSAsyncHandle *handle, GPerlCallback *callba
 	G_LOCK (vfs2perl_async_callbacks);
 	{
 		GList *list;
-		
+
 		if (vfs2perl_async_callbacks == NULL)
 			vfs2perl_async_callbacks =
 			  g_hash_table_new_full (NULL,
@@ -42,10 +42,10 @@ vfs2perl_async_callbacks_add (GnomeVFSAsyncHandle *handle, GPerlCallback *callba
 			                         NULL,
 			                         (GDestroyNotify)
 			                           g_list_free);
-		
+
 		list = g_hash_table_lookup (vfs2perl_async_callbacks, handle);
 		list = g_list_append (list, callback);
-		
+
 		g_hash_table_insert (vfs2perl_async_callbacks, handle, list);
 	}
 	G_UNLOCK (vfs2perl_async_callbacks);
@@ -57,7 +57,7 @@ void vfs2perl_async_callbacks_destroy (GnomeVFSAsyncHandle *handle)
 	{
 		if (vfs2perl_async_callbacks != NULL) {
 			GList *list = g_hash_table_lookup (vfs2perl_async_callbacks, handle);
-		
+
 			if (list != NULL) {
 				/* GPerlCallback *callback = g_list_last (list)->data;
 
@@ -65,15 +65,15 @@ void vfs2perl_async_callbacks_destroy (GnomeVFSAsyncHandle *handle)
 					gperl_callback_destroy (callback); */
 
 				GList *i;
-		
+
 				for (i = list; i != NULL; i = i->next)
 					if (i->data != NULL)
 						gperl_callback_destroy ((GPerlCallback *) i->data);
-		
+
 				if (g_list_length (list) == 0)
 					g_hash_table_remove (vfs2perl_async_callbacks, handle);
 			}
-		
+
 			if (g_hash_table_size (vfs2perl_async_callbacks) == 0) {
 				g_hash_table_destroy (vfs2perl_async_callbacks);
 				vfs2perl_async_callbacks = NULL;
@@ -87,7 +87,7 @@ void vfs2perl_async_callbacks_destroy (GnomeVFSAsyncHandle *handle)
 /* ------------------------------------------------------------------------- */
 
 static GPerlCallback *
-vfs2perl_async_open_callback_create (SV *func, SV *data)
+vfs2perl_async_callback_create (SV *func, SV *data)
 {
 	GType param_types [] = {
 		GNOME_VFS_TYPE_VFS_ASYNC_HANDLE,
@@ -98,9 +98,9 @@ vfs2perl_async_open_callback_create (SV *func, SV *data)
 }
 
 static void
-vfs2perl_async_open_callback (GnomeVFSAsyncHandle *handle,
-                              GnomeVFSResult result,
-                              GPerlCallback *callback)
+vfs2perl_async_callback (GnomeVFSAsyncHandle *handle,
+                         GnomeVFSResult result,
+                         GPerlCallback *callback)
 {
 	gperl_callback_invoke (callback, NULL, handle, result);
 }
@@ -346,6 +346,43 @@ vfs2perl_async_find_directory_callback (GnomeVFSAsyncHandle *handle,
 
 /* ------------------------------------------------------------------------- */
 
+static GPerlCallback *
+vfs2perl_async_set_file_info_callback_create (SV *func, SV *data)
+{
+	return gperl_callback_new (func, data, 0, NULL, 0);
+}
+
+static void
+vfs2perl_async_set_file_info_callback (GnomeVFSAsyncHandle *handle,
+                                       GnomeVFSResult result,
+                                       GnomeVFSFileInfo *file_info,
+                                       GPerlCallback* callback)
+{
+	dGPERL_CALLBACK_MARSHAL_SP;
+	GPERL_CALLBACK_MARSHAL_INIT (callback);
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	EXTEND (SP, 3);
+	PUSHs (sv_2mortal (newSVGnomeVFSAsyncHandle (handle)));
+	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
+	PUSHs (sv_2mortal (newSVGnomeVFSFileInfo (file_info)));
+	if (callback->data)
+		XPUSHs (sv_2mortal (newSVsv (callback->data)));
+
+	PUTBACK;
+
+	call_sv (callback->func, G_DISCARD);
+
+	FREETMPS;
+	LEAVE;
+}
+
+/* ------------------------------------------------------------------------- */
+
 MODULE = Gnome2::VFS::Async	PACKAGE = Gnome2::VFS::Async	PREFIX = gnome_vfs_async_
 
 ##  void gnome_vfs_async_set_job_limit (int limit) 
@@ -372,14 +409,14 @@ gnome_vfs_async_open (class, text_uri, open_mode, priority, func, data=NULL)
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = vfs2perl_async_open_callback_create (func, data);
+	callback = vfs2perl_async_callback_create (func, data);
 
 	gnome_vfs_async_open (&RETVAL,
                               text_uri,
                               open_mode,
                               priority,
                               (GnomeVFSAsyncOpenCallback)
-                                vfs2perl_async_open_callback,
+                                vfs2perl_async_callback,
                               callback);
 
 	/* vfs2perl_async_callbacks_add (RETVAL, callback); */
@@ -399,14 +436,14 @@ gnome_vfs_async_open_uri (class, uri, open_mode, priority, func, data=NULL)
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = vfs2perl_async_open_callback_create (func, data);
+	callback = vfs2perl_async_callback_create (func, data);
 
 	gnome_vfs_async_open_uri (&RETVAL,
                                   uri,
                                   open_mode,
                                   priority,
                                   (GnomeVFSAsyncOpenCallback)
-                                    vfs2perl_async_open_callback,
+                                    vfs2perl_async_callback,
                                   callback);
 
 	/* vfs2perl_async_callbacks_add (RETVAL, callback); */
@@ -450,7 +487,7 @@ gnome_vfs_async_create (class, text_uri, open_mode, exclusive, perm, priority, f
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = vfs2perl_async_open_callback_create (func, data);
+	callback = vfs2perl_async_callback_create (func, data);
 
 	gnome_vfs_async_create (&RETVAL,
 	                        text_uri,
@@ -458,8 +495,8 @@ gnome_vfs_async_create (class, text_uri, open_mode, exclusive, perm, priority, f
 	                        exclusive,
 	                        perm,
 	                        priority,
-	                        (GnomeVFSAsyncOpenCallback)
-	                          vfs2perl_async_open_callback,
+	                        (GnomeVFSAsyncCreateCallback)
+	                          vfs2perl_async_callback,
 	                        callback);
 
 	/* vfs2perl_async_callbacks_add (RETVAL, callback); */
@@ -481,7 +518,7 @@ gnome_vfs_async_create_uri (class, uri, open_mode, exclusive, perm, priority, fu
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = vfs2perl_async_open_callback_create (func, data);
+	callback = vfs2perl_async_callback_create (func, data);
 
 	gnome_vfs_async_create_uri (&RETVAL,
 	                            uri,
@@ -490,7 +527,7 @@ gnome_vfs_async_create_uri (class, uri, open_mode, exclusive, perm, priority, fu
 	                            perm,
 	                            priority,
 	                            (GnomeVFSAsyncOpenCallback)
-	                              vfs2perl_async_open_callback,
+	                              vfs2perl_async_callback,
 	                            callback);
 
 	/* vfs2perl_async_callbacks_add (RETVAL, callback); */
@@ -510,14 +547,14 @@ gnome_vfs_async_create_symbolic_link (class, uri, uri_reference, priority, func,
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = vfs2perl_async_open_callback_create (func, data);
+	callback = vfs2perl_async_callback_create (func, data);
 
 	gnome_vfs_async_create_symbolic_link (&RETVAL,
 	                                      uri,
 	                                      uri_reference,
 	                                      priority,
 	                                      (GnomeVFSAsyncOpenCallback)
-	                                        vfs2perl_async_open_callback,
+	                                        vfs2perl_async_callback,
 	                                      callback);
 
 	/* vfs2perl_async_callbacks_add (RETVAL, callback); */
@@ -557,17 +594,36 @@ gnome_vfs_async_get_file_info (class, uri_ref, options, priority, func, data=NUL
     OUTPUT:
 	RETVAL
 
-###  void gnome_vfs_async_set_file_info (GnomeVFSAsyncHandle **handle_return, GnomeVFSURI *uri, GnomeVFSFileInfo *info, GnomeVFSSetFileInfoMask mask, GnomeVFSFileInfoOptions options, int priority, GnomeVFSAsyncSetFileInfoCallback callback, gpointer callback_data) 
-#void
-#gnome_vfs_async_set_file_info (handle_return, uri, info, mask, options, priority, callback, callback_data)
-#	GnomeVFSAsyncHandle **handle_return
-#	GnomeVFSURI *uri
-#	GnomeVFSFileInfo *info
-#	GnomeVFSSetFileInfoMask mask
-#	GnomeVFSFileInfoOptions options
-#	int priority
-#	GnomeVFSAsyncSetFileInfoCallback callback
-#	gpointer callback_data
+##  void gnome_vfs_async_set_file_info (GnomeVFSAsyncHandle **handle_return, GnomeVFSURI *uri, GnomeVFSFileInfo *info, GnomeVFSSetFileInfoMask mask, GnomeVFSFileInfoOptions options, int priority, GnomeVFSAsyncSetFileInfoCallback callback, gpointer callback_data) 
+GnomeVFSAsyncHandle *
+gnome_vfs_async_set_file_info (class, uri, info, mask, options, priority, func, data=NULL)
+	GnomeVFSURI *uri
+	GnomeVFSFileInfo *info
+	GnomeVFSSetFileInfoMask mask
+	GnomeVFSFileInfoOptions options
+	int priority
+	SV *func
+	SV *data
+    PREINIT:
+	GPerlCallback *callback;
+    CODE:
+	callback = vfs2perl_async_set_file_info_callback_create (func, data);
+
+	gnome_vfs_async_set_file_info (&RETVAL,
+	                               uri,
+	                               info,
+	                               mask,
+	                               options,
+	                               priority,
+	                               (GnomeVFSAsyncSetFileInfoCallback)
+	                                 vfs2perl_async_set_file_info_callback,
+	                               callback);
+
+	/* vfs2perl_async_callbacks_add (RETVAL, callback); */
+
+	/* FIXME, FIXME, FIXME: what about callback destruction? */
+    OUTPUT:
+	RETVAL
 
 ##  void gnome_vfs_async_load_directory (GnomeVFSAsyncHandle **handle_return, const gchar *text_uri, GnomeVFSFileInfoOptions options, guint items_per_notification, int priority, GnomeVFSAsyncDirectoryLoadCallback callback, gpointer callback_data) 
 GnomeVFSAsyncHandle *
@@ -775,11 +831,11 @@ gnome_vfs_async_close (handle, func, data=NULL)
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = vfs2perl_async_open_callback_create (func, data);
+	callback = vfs2perl_async_callback_create (func, data);
 
 	gnome_vfs_async_close (handle,
                                (GnomeVFSAsyncCloseCallback)
-                                 vfs2perl_async_open_callback,
+                                 vfs2perl_async_callback,
                                callback);
 
 	/* vfs2perl_async_callbacks_add (handle, callback); */
@@ -842,3 +898,31 @@ gnome_vfs_async_write (handle, buffer, bytes, func, data=NULL)
 	/* vfs2perl_async_callbacks_add (handle, callback); */
 
 	/* FIXME, FIXME, FIXME: what about callback destruction? */
+
+#if VFS_CHECK_VERSION (2, 6, 0)
+
+##  void gnome_vfs_async_seek (GnomeVFSAsyncHandle *handle, GnomeVFSSeekPosition whence, GnomeVFSFileOffset offset, GnomeVFSAsyncSeekCallback callback, gpointer callback_data) 
+void
+gnome_vfs_async_seek (handle, whence, offset, func, data=NULL)
+	GnomeVFSAsyncHandle *handle
+	GnomeVFSSeekPosition whence
+	GnomeVFSFileOffset offset
+	SV *func
+	SV *data
+    PREINIT:
+	GPerlCallback *callback;
+    CODE:
+	callback = vfs2perl_async_callback_create (func, data);
+
+	gnome_vfs_async_seek (handle,
+	                      whence,
+	                      offset,
+	                      (GnomeVFSAsyncSeekCallback)
+	                        vfs2perl_async_callback,
+	                      callback);
+
+	/* vfs2perl_async_callbacks_add (handle, callback); */
+
+	/* FIXME, FIXME, FIXME: what about callback destruction? */
+
+#endif /* 2.6 */

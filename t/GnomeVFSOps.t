@@ -4,10 +4,10 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.10.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.13 2004/07/29 17:36:03 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 44) :
+  (tests => 46) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -47,10 +47,17 @@ is_deeply([Gnome2::VFS::URI -> new(TMP . "/bla") -> check_same_fs(Gnome2::VFS::U
 
 is(Gnome2::VFS -> create_symbolic_link(Gnome2::VFS::URI -> new(TMP . "/bli"), "/usr/bin/perl"), "ok");
 
+is(Gnome2::VFS -> set_file_info(TMP . "/bla",
+                                { permissions => [qw/user-read user-write/] },
+                                qw/permissions/), "ok");
+
 is(Gnome2::VFS -> unlink(TMP . "/bla"), "ok");
 is(Gnome2::VFS -> unlink(TMP . "/bli"), "ok");
 
 my $uri = Gnome2::VFS::URI -> new(TMP . "/ble");
+
+is($uri -> set_file_info({ permissions => [qw/user-read user-write/] },
+                         qw/permissions/), "ok");
 
 ok($uri -> exists());
 is($uri -> unlink(), "ok");

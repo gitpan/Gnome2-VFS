@@ -6,10 +6,10 @@ use Cwd qw(cwd);
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSFileInfo.t,v 1.4.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSFileInfo.t,v 1.8 2005/03/07 21:16:44 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 3) :
+  (tests => 12) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -21,6 +21,31 @@ my $info = Gnome2::VFS -> get_file_info(cwd() . "/" . $0, qw(get-mime-type));
 isa_ok($info, "Gnome2::VFS::FileInfo");
 ok($info -> matches($info));
 is($info -> get_mime_type(), $info -> { mime_type });
+
+###############################################################################
+
+$info = Gnome2::VFS::FileInfo -> new({
+  name => $0,
+  type => "regular",
+  permissions => [qw(user-read user-write)],
+  flags => "local",
+  size => 23,
+  mime_type => "text/plain"
+});
+
+isa_ok($info, "Gnome2::VFS::FileInfo");
+ok($info -> matches($info));
+is($info -> get_mime_type(), $info -> { mime_type });
+
+is($info -> { name }, $0);
+is($info -> { type }, "regular");
+TODO: {
+  local $TODO = "Test::More bug?";
+  is_deeply($info -> { permissions }, [qw(user-read user-write)]);
+}
+is($info -> { flags }, "local");
+is($info -> { size }, 23);
+is($info -> { mime_type }, "text/plain");
 
 ###############################################################################
 
