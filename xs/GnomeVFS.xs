@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.14 2003/11/29 03:09:29 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.16 2003/12/19 17:26:26 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -90,6 +90,30 @@ SvGnomeVFSURIGList (SV *ref)
 			list = g_list_append(list, SvGnomeVFSURI (*value));
 
 	return list;
+}
+
+char **SvEnvArray (SV *ref)
+{
+	char **result = NULL;
+
+	if (SvOK (ref))
+		if (SvRV (ref) && SvTYPE (SvRV (ref)) == SVt_PVAV) {
+			AV *array = (AV *) SvRV (ref);
+			SV **string;
+
+			int i, length = av_len (array);
+			result = g_new0 (char *, length + 2);
+
+			for (i = 0; i <= length; i++)
+				if ((string = av_fetch (array, i, 0)) && SvOK (*string))
+					result[i] = SvPV_nolen (*string);
+
+			result[length + 1] = NULL;
+		}
+		else
+			croak ("the environment parameter must be an array reference");
+
+	return result;
 }
 
 SV *
@@ -169,6 +193,7 @@ Returns the major, minor and micro version numbers of GnomeVFS.
 void
 gnome_vfs_get_version_info (class)
     PPCODE:
+	PERL_UNUSED_VAR (ax);
 	EXTEND (SP, 3);
 	PUSHs (sv_2mortal (newSViv (VFS_MAJOR_VERSION)));
 	PUSHs (sv_2mortal (newSViv (VFS_MINOR_VERSION)));

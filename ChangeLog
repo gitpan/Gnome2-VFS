@@ -1,3 +1,127 @@
+2003/12/22 01:19 (+0100) kaffeetisch
+
+	* META.yml
+	* VFS.pm: Version 0.10.
+
+2003/12/21 15:17 (+0100) kaffeetisch
+
+	* VFS.pm: Add a KNOWN BUGS section.
+
+2003/12/20 14:34 (+0100) kaffeetisch
+
+	* xs/GnomeVFSAsync.xs: Add a commented out attempt to handle
+	callback destruction.  Comment out the thread locks as they caused
+	the async stuff to not work anymore.
+
+2003/12/19 18:20 (+0100) kaffeetisch
+
+	* Makefile.PL: Make the GType version check more robust.
+
+	* vfs2perl.h
+	* xs/GnomeVFS.xs: Move SvEnvArray from Gnome2 here.
+
+	* t/GnomeVFSMime
+	* xs/GnomeVFSMime.xs: Many leakage related minor changes and some
+	commentary.  API doc.
+
+2003/12/18 20:42 (-0500) muppetman
+
+	* xs/GnomeVFS.xs: hush unused var warning in get_version_info.
+
+	* xs/GnomeVFSAsync.xs: looks like a couple of
+	s/VFS2PERL_GNOME_TYPE/GNOME_VFS_TYPE/ slipped through the cracks.
+
+	* xs/GnomeVFSDirectory.xs, xs/GnomeVFSOps.xs: if using PPCODE, the
+	return type should be void.  this hushes some 'unused var RETVAL'
+	warnings.
+
+	* xs/GnomeVFSUtils.xs: disambiguating braces hush compiler warnings.
+	
+2003/12/18 22:23 (+0100) kaffeetisch
+
+	* VFS.pm: Mention Gnome2::VFS::index.
+
+	* Makefile.PL
+	* maps
+	* vfs2perl.h
+	* xs/GnomeVFSXfer.xs: Since gnome-vfs 2.5.3 now ships with own
+	GTypes, we use those instead of the home-grown ones if they are
+	available.  For that to work, GNOME_VFS_TYPE_VFS_ is now used as
+	the prefix for all GTypes so that we can easily switch between our
+	and gnome-vfs' implementation.
+
+2003/12/12 23:29 (+0100) kaffeetisch
+
+	A README
+	* MANIFEST: Add a README.
+
+	* VFS.pm: Remove license boilerplate.
+
+	* vfs2perl.h: Add a SvGnomeVFSMimeApplication prototype to silence
+	compiler warnings.
+
+	* t/GnomeVFSApplicationRegistry
+	* t/GnomeVFSAsync
+	* t/GnomeVFSDirectory.t
+	* t/GnomeVFSFileInfo.t
+	* t/GnomeVFSOps.t
+	* t/GnomeVFSURI.t
+	* t/GnomeVFSUtils.t
+	* t/GnomeVFSXfer.t: Use the -init parameter instead of calling the
+	init method manually.
+
+	* xs/GnomeVFSApplicationRegistry.xs
+	* xs/GnomeVFSOps.xs: Add API doc.
+
+2003/12/04 19:31 (+0100) kaffeetisch
+
+	* t/GnomeVFSUtils.t
+	* xs/GnomeVFSUtils.xs: Implement Gnome2::VFS::url_show_with_env.
+
+2003/12/02 22:14 (-0500) muppetman
+
+	* t/GnomeVFSUtils.t: updated the skip count
+
+2003/12/01 23:42 (+0100) kaffeetisch
+
+	* t/GnomeVFSMime: Remove a blank.
+
+	* xs/GnomeVFSMime.xs: Enable some currently leaking methods.
+
+	* xs/GnomeVFSOps.xs: Update comments.
+
+	* t/GnomeVFSUtils.t
+	* xs/GnomeVFSUtils.xs: Implement and test
+	Gnome2::VFS::read_entire_file.
+
+2003/11/30 16:41 (+0100) kaffeetisch
+
+	* xs/GnomeVFSMime.xs: In SvGnomeVFSMimeApplication, check if a
+	pointer is non-NULL before dereferencing it.
+
+	* vfs.typemap
+	* xs/GnomeVFSApplicationRegistry.xs
+	* t/GnomeVFSApplicationRegistry: Implement and test
+	Gnome2::VFS::Application::get_mime_application,
+	Gnome2::VFS::Mime::Application::is_user_owned and
+	Gnome2::VFS::Mime::Application::save.
+
+2003/11/30 15:22 (+0100) kaffeetisch
+
+	A MANIFEST.SKIP
+	* MANIFEST: Imported a skip file.
+
+2003/11/29 18:03 (+0100) kaffeetisch
+
+	* t/GnomeVFSUtils.t
+	* xs/GnomeVFSUtils.xs: Alter the version checks:
+	gnome_vfs_make_uri_from_input_with_dirs was introduced in 2.3.1.
+
+2003/11/29 17:03 (+0100) kaffeetisch
+
+	* vfs2perl.h: Include
+	libgnomevfs/gnome-vfs-application-registry.h.
+
 2003/11/29 14:15 (+0100) kaffeetisch
 
 	R t/GnomeVFSMime.t

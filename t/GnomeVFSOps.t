@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
-use Gnome2::VFS;
+use Gnome2::VFS -init;
 
 use Test::More tests => 44;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.8 2003/11/23 21:48:37 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.9 2003/12/12 23:08:13 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -14,10 +14,6 @@ use constant TMP => cwd() . "/tmp";
 unless (-e TMP) {
   mkdir(TMP) or die ("Urgh, couldn't create the scratch directory: $!");
 }
-
-###############################################################################
-
-Gnome2::VFS -> init();
 
 ###############################################################################
 

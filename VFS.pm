@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.7 2003/11/29 13:20:33 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.10 2003/12/21 14:17:51 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -12,7 +12,7 @@ require DynaLoader;
 
 our @ISA = qw(DynaLoader);
 
-our $VERSION = '0.05';
+our $VERSION = '0.10';
 
 sub import {
   my $self = shift();
@@ -123,14 +123,27 @@ found at
 
 is the canonical reference.
 
+In addition to that, there's also the automatically generated API
+documentation: L<Gnome2::VFS::index>(3pm).
+
 The mapping described in L<Gtk2::api>(3pm) also applies to this module.
 
 To discuss this module, ask questions and flame/praise the authors, join
 gtk-perl-list@gnome.org at lists.gnome.org.
 
+=head1 KNOWN BUGS
+
+There are some memory leaks especially with respect to callbacks.  This mainly
+affects GnomeVFSAsync as well as some parts of GnomeVFSXfer and GnomeVFSOps.
+GnomeVFSMime leaks some list data.
+
+GnomeVFSAsync is also known to crash occasionally when there are many
+concurrent transfers.
+
 =head1 SEE ALSO
 
-L<perl>(1), L<Glib>(3pm), L<Gtk2>(3pm), L<Gtk2::api>(3pm).
+L<perl>(1), L<Gnome2::VFS::index>(3pm), L<Glib>(3pm), L<Gtk2>(3pm),
+L<Gtk2::api>(3pm).
 
 =head1 AUTHOR
 
@@ -139,19 +152,5 @@ Torsten Schoenfeld E<lt>kaffeetisch@web.deE<gt>.
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2003 by the gtk2-perl team
-
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 2.1 of the License, or (at your option) any
-later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
-details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with this library; if not, write to the Free Software Foundation, Inc.,
-59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 =cut

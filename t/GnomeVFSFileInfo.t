@@ -1,16 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
-use Gnome2::VFS;
+use Gnome2::VFS -init;
 
 use Cwd qw(cwd);
 
 use Test::More tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSFileInfo.t,v 1.3 2003/11/23 21:48:37 kaffeetisch Exp $
-
-###############################################################################
-
-Gnome2::VFS -> init();
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSFileInfo.t,v 1.4 2003/12/12 23:08:13 kaffeetisch Exp $
 
 ###############################################################################
 

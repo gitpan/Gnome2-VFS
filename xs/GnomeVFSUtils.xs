@@ -15,10 +15,39 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.6 2003/11/15 11:18:48 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.10 2003/12/19 01:48:36 muppetman Exp $
  */
 
 #include "vfs2perl.h"
+
+/* ------------------------------------------------------------------------- */
+
+char **SvGnomeVFSCharArray (SV *ref)
+{
+	char **result = NULL;
+
+	if (SvOK (ref)) {
+		if (SvRV (ref) && SvTYPE (SvRV (ref)) == SVt_PVAV) {
+			AV *array = (AV *) SvRV (ref);
+			SV **string;
+
+			int i, length = av_len (array);
+			result = g_new0 (char *, length + 2);
+
+			for (i = 0; i <= length; i++)
+				if ((string = av_fetch (array, i, 0)) && SvOK (*string))
+					result[i] = SvPV_nolen (*string);
+
+			result[length + 1] = NULL;
+		}
+		else
+			croak ("the environment parameter must be an array reference");
+	}
+
+	return result;
+}
+
+/* ------------------------------------------------------------------------- */
 
 MODULE = Gnome2::VFS::Utils	PACKAGE = Gnome2::VFS	PREFIX = gnome_vfs_
 
@@ -201,16 +230,27 @@ gnome_vfs_is_primary_thread (class)
     C_ARGS:
 	/* void */
 
-# FIXME: implement.
-###  GnomeVFSResult gnome_vfs_read_entire_file (const char *uri, int *file_size, char **file_contents) 
-#GnomeVFSResult
-#gnome_vfs_read_entire_file (uri, file_size, file_contents)
-#	const char *uri
-#	int *file_size
-#	char **file_contents
-#	
-
 #if VFS_CHECK_VERSION (2, 1, 3)
+
+=for apidoc
+
+Returns a GnomeVFSResult, the file size and the file content.
+
+=cut
+##  GnomeVFSResult gnome_vfs_read_entire_file (const char *uri, int *file_size, char **file_contents) 
+void
+gnome_vfs_read_entire_file (class, uri)
+	const char *uri
+    PREINIT:
+	GnomeVFSResult result;
+	int file_size = 0;
+	char *file_contents = NULL;
+    PPCODE:
+	result = gnome_vfs_read_entire_file (uri, &file_size, &file_contents);
+	EXTEND (sp, 3);
+	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
+	PUSHs (sv_2mortal (newSViv (file_size)));
+	PUSHs (sv_2mortal (newSVpv (file_contents, file_size)));
 
 ##  char * gnome_vfs_format_uri_for_display (const char *uri) 
 char *
@@ -232,7 +272,7 @@ gnome_vfs_make_uri_from_input (class, uri)
 
 #endif
 
-#if VFS_CHECK_VERSION (2, 2, 5)
+#if VFS_CHECK_VERSION (2, 3, 1)
 
 ##  char * gnome_vfs_make_uri_from_input_with_dirs (const char *uri, GnomeVFSMakeURIDirs dirs) 
 char *
@@ -296,7 +336,7 @@ gnome_vfs_make_uri_from_shell_arg (class, uri)
 
 #endif
 
-#if VFS_CHECK_VERSION (2, 2, 5)
+#if VFS_CHECK_VERSION (2, 3, 1)
 
 ##  GnomeVFSResult gnome_vfs_url_show (const char *url) 
 GnomeVFSResult
@@ -305,11 +345,19 @@ gnome_vfs_url_show (class, url)
     C_ARGS:
 	url
 
-#endif
+##  GnomeVFSResult gnome_vfs_url_show_with_env (const char *url, char **envp) 
+GnomeVFSResult
+gnome_vfs_url_show_with_env (class, url, env_ref)
+	const char *url
+	SV *env_ref
+    PREINIT:
+	char **envp;
+    CODE:
+	warn;
+	envp = SvGnomeVFSCharArray (env_ref);
+	RETVAL = gnome_vfs_url_show_with_env (url, envp);
+	g_free (envp);
+    OUTPUT:
+	RETVAL
 
-# FIXME: implement?
-###  GnomeVFSResult gnome_vfs_url_show_with_env (const char *url, char **envp) 
-#GnomeVFSResult
-#gnome_vfs_url_show_with_env (url, envp)
-#	const char *url
-#	char **envp
+#endif

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSXfer.xs,v 1.10 2003/11/28 20:50:30 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSXfer.xs,v 1.11 2003/12/18 21:33:04 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -103,9 +103,9 @@ vfs2perl_xfer_progress_callback (GnomeVFSXferProgressInfo *info,
 	SPAGAIN;
 
 	if (info->status == GNOME_VFS_XFER_PROGRESS_STATUS_VFSERROR)
-		retval = sv_to_int (VFS2PERL_GNOME_TYPE_VFS_XFER_ERROR_ACTION, POPs);
+		retval = sv_to_int (GNOME_VFS_TYPE_VFS_XFER_ERROR_ACTION, POPs);
 	else if (info->status == GNOME_VFS_XFER_PROGRESS_STATUS_OVERWRITE)
-		retval = sv_to_int (VFS2PERL_GNOME_TYPE_VFS_XFER_OVERWRITE_ACTION, POPs);
+		retval = sv_to_int (GNOME_VFS_TYPE_VFS_XFER_OVERWRITE_ACTION, POPs);
 	else
 		retval = POPi;
 

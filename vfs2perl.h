@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.h,v 1.11 2003/11/28 20:50:27 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.h,v 1.15 2003/12/19 17:26:24 kaffeetisch Exp $
  */
 
 #ifndef _VFS2PERL_H_
@@ -28,22 +28,23 @@
 #include <libgnomevfs/gnome-vfs-handle.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <libgnomevfs/gnome-vfs-mime-monitor.h>
+#include <libgnomevfs/gnome-vfs-application-registry.h>
 
 /* ------------------------------------------------------------------------- */
 
-#define VFS2PERL_GNOME_TYPE_VFS_URI (vfs2perl_gnome_vfs_uri_get_type ())
+#define GNOME_VFS_TYPE_VFS_URI (vfs2perl_gnome_vfs_uri_get_type ())
 GType vfs2perl_gnome_vfs_uri_get_type (void) G_GNUC_CONST;
 
-#define VFS2PERL_GNOME_TYPE_VFS_HANDLE (vfs2perl_gnome_vfs_handle_get_type ())
+#define GNOME_VFS_TYPE_VFS_HANDLE (vfs2perl_gnome_vfs_handle_get_type ())
 GType vfs2perl_gnome_vfs_handle_get_type (void) G_GNUC_CONST;
 
-#define VFS2PERL_GNOME_TYPE_VFS_MONITOR_HANDLE (vfs2perl_gnome_vfs_monitor_handle_get_type ())
+#define GNOME_VFS_TYPE_VFS_MONITOR_HANDLE (vfs2perl_gnome_vfs_monitor_handle_get_type ())
 GType vfs2perl_gnome_vfs_monitor_handle_get_type (void) G_GNUC_CONST;
 
-#define VFS2PERL_GNOME_TYPE_VFS_DIRECTORY_HANDLE (vfs2perl_gnome_vfs_directory_handle_get_type ())
+#define GNOME_VFS_TYPE_VFS_DIRECTORY_HANDLE (vfs2perl_gnome_vfs_directory_handle_get_type ())
 GType vfs2perl_gnome_vfs_directory_handle_get_type (void) G_GNUC_CONST;
 
-#define VFS2PERL_GNOME_TYPE_VFS_ASYNC_HANDLE (vfs2perl_gnome_vfs_async_handle_get_type ())
+#define GNOME_VFS_TYPE_VFS_ASYNC_HANDLE (vfs2perl_gnome_vfs_async_handle_get_type ())
 GType vfs2perl_gnome_vfs_async_handle_get_type (void) G_GNUC_CONST;
 
 /* ------------------------------------------------------------------------- */
@@ -57,8 +58,8 @@ GType vfs2perl_gnome_vfs_async_handle_get_type (void) G_GNUC_CONST;
  */
 #if !VFS_CHECK_VERSION (2, 1, 0)
 # define VFS2PERL_BROKEN_FILE_PERMISSIONS
-# undef VFS2PERL_GNOME_TYPE_VFS_FILE_PERMISSIONS
-# define VFS2PERL_GNOME_TYPE_VFS_FILE_PERMISSIONS (_vfs2perl_gnome_vfs_file_permissions_get_type ())
+# undef GNOME_VFS_TYPE_VFS_FILE_PERMISSIONS
+# define GNOME_VFS_TYPE_VFS_FILE_PERMISSIONS (_vfs2perl_gnome_vfs_file_permissions_get_type ())
   GType _vfs2perl_gnome_vfs_file_permissions_get_type (void) G_GNUC_CONST;
 #endif
 
@@ -87,6 +88,7 @@ SV * newSVGnomeVFSMimeType (const char *mime_type);
 /* ------------------------------------------------------------------------- */
 
 SV * newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application);
+GnomeVFSMimeApplication * SvGnomeVFSMimeApplication (SV *object);
 
 GnomeVFSFileInfo * SvGnomeVFSFileInfo (SV *object);
 SV * newSVGnomeVFSFileInfo (GnomeVFSFileInfo *info);
@@ -98,6 +100,8 @@ SV * newSVGnomeVFSXferProgressInfo (GnomeVFSXferProgressInfo *info);
 GList * SvPVGList (SV *ref);
 
 GList * SvGnomeVFSURIGList (SV *ref);
+
+char ** SvEnvArray (SV *ref);
 
 SV * newSVGnomeVFSFileInfoGList (GList *list);
 

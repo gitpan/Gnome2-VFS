@@ -1,27 +1,24 @@
 #!/usr/bin/perl -w
 use strict;
-use Gnome2::VFS;
+use Gnome2::VFS -init;
 
 use Cwd qw(cwd);
 
-use Test::More tests => 24;
+use Test::More tests => 27;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.4 2003/11/23 21:48:37 kaffeetisch Exp $
-
-###############################################################################
-
-Gnome2::VFS -> init();
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.9 2003/12/12 23:08:13 kaffeetisch Exp $
 
 ###############################################################################
 
 # Gnome2::VFS -> escape_set(...);
 # Gnome2::VFS -> icon_path_from_filename(...);
-# Gnome2::VFS -> url_show(...);
+# Gnome2::VFS -> url_show("http://www.bla.de");
+# Gnome2::VFS -> url_show_with_env("http://www.bla.de", [map { "$_=" . $ENV{ $_ } } (keys(%ENV))]);
 
 is(Gnome2::VFS -> format_file_size_for_display(1200000000), "1.1 GB");
 
 SKIP: {
-  skip("escape_string, format_uri_for_display, gnome_vfs_make_uri_from_input, make_uri_canonical_strip_fragment, uris_match, get_uri_scheme and make_uri_from_shell_arg are new in 2.1.3", 7)
+  skip("escape_string, format_uri_for_display, gnome_vfs_make_uri_from_input, make_uri_canonical_strip_fragment, uris_match, get_uri_scheme and make_uri_from_shell_arg are new in 2.1.3", 10)
     unless (Gnome2::VFS -> check_version(2, 1, 3));
 
   is(Gnome2::VFS -> escape_string('%$§'), '%25%24%A7');
@@ -31,11 +28,16 @@ SKIP: {
   ok(Gnome2::VFS -> uris_match("http://gtk2-perl.sf.net", "http://gtk2-perl.sf.net"));
   is(Gnome2::VFS -> get_uri_scheme("http://gtk2-perl.sf.net"), "http");
   is(Gnome2::VFS -> make_uri_from_shell_arg("/~/bla"), "file:///~/bla");
+
+  my ($result, $size, $content) = Gnome2::VFS -> read_entire_file(cwd() . "/" . $0);
+  is($result, "ok");
+  like($size, qr/^\d+$/);
+  like($content, qr(^#!/usr/bin/perl));
 }
 
 SKIP: {
-  skip("make_uri_from_input_with_dirs is new in 2.2.5", 1)
-    unless (Gnome2::VFS -> check_version(2, 2, 5));
+  skip("make_uri_from_input_with_dirs is new in 2.3.1", 1)
+    unless (Gnome2::VFS -> check_version(2, 3, 1));
 
   is(Gnome2::VFS -> make_uri_from_input_with_dirs("~/tmp", qw(homedir)), "file://$ENV{ HOME }/tmp");
 }

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.15 2003/11/29 03:22:19 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.18 2003/12/19 01:48:32 muppetman Exp $
  */
 
 #include "vfs2perl.h"
@@ -239,7 +239,7 @@ Returns a GnomeVFSResult and the number of bytes written.
 
 =cut
 ##  GnomeVFSResult gnome_vfs_write (GnomeVFSHandle *handle, gconstpointer buffer, GnomeVFSFileSize bytes, GnomeVFSFileSize *bytes_written) 
-GnomeVFSResult
+void
 gnome_vfs_write (handle, buffer, bytes)
 	GnomeVFSHandle *handle
 	char *buffer;
@@ -278,8 +278,13 @@ gnome_vfs_tell (handle)
 	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
 	PUSHs (sv_2mortal (newSViv (offset_return)));
 
+=for apidoc
+
+Returns a GnomeVFSResult and a GnomeVFSFileInfo.
+
+=cut
 ##  GnomeVFSResult gnome_vfs_get_file_info_from_handle (GnomeVFSHandle *handle, GnomeVFSFileInfo *info, GnomeVFSFileInfoOptions options) 
-GnomeVFSResult
+void
 gnome_vfs_get_file_info (handle, options)
 	GnomeVFSHandle *handle
 	GnomeVFSFileInfoOptions options
@@ -327,8 +332,13 @@ gnome_vfs_uri_open (uri, open_mode)
 	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
 	PUSHs (sv_2mortal (newSVGnomeVFSHandle (handle)));
 
+=for apidoc
+
+Returns a GnomeVFSResult and a GnomeVFSHandle.
+
+=cut
 ##  GnomeVFSResult gnome_vfs_create_uri (GnomeVFSHandle **handle, GnomeVFSURI *uri, GnomeVFSOpenMode open_mode, gboolean exclusive, guint perm) 
-GnomeVFSResult
+void
 gnome_vfs_uri_create (uri, open_mode, exclusive, perm)
 	GnomeVFSURI *uri
 	GnomeVFSOpenMode open_mode
@@ -460,6 +470,8 @@ gnome_vfs_monitor_add (class, text_uri, monitor_type, func, data=NULL)
     PPCODE:
 	callback = vfs2perl_monitor_callback_create (func, data);
 
+	/* FIXME: destroy that callback somehow. */
+
 	result = gnome_vfs_monitor_add (&handle,
 	                                text_uri,
 	                                monitor_type,
@@ -479,14 +491,6 @@ MODULE = Gnome2::VFS::Ops	PACKAGE = Gnome2::VFS::Monitor::Handle	PREFIX = gnome_
 GnomeVFSResult
 gnome_vfs_monitor_cancel (handle)
 	GnomeVFSMonitorHandle *handle
-    CODE:
-	/* FIXME, FIXME, FIXME: why do I get «dereferencing pointer to incomplete type» here?
-	if (handle && handle->user_data)
-		gperl_callback_destroy ((GPerlCallback *) handle->user_data); */
-
-	RETVAL = gnome_vfs_monitor_cancel (handle);
-    OUTPUT:
-	RETVAL
 
 # --------------------------------------------------------------------------- #
 

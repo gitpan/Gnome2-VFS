@@ -1,0 +1,11 @@
+CVS
+\.bak$
+\.bs$
+\.o$
+Makefile$
+Makefile\.old$
+~$
+\.sw.$
+\.cvsignore$
+blib
+build

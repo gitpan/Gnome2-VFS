@@ -1,14 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
-use Gnome2::VFS;
+use Gnome2::VFS -init;
 
 use Test::More tests => 29;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.3 2003/11/07 19:55:58 kaffeetisch Exp $
-
-###############################################################################
-
-Gnome2::VFS -> init();
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.4 2003/12/12 23:08:13 kaffeetisch Exp $
 
 ###############################################################################
 

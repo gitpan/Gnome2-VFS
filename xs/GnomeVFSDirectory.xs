@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSDirectory.xs,v 1.10 2003/11/28 20:50:30 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSDirectory.xs,v 1.11 2003/12/19 01:48:32 muppetman Exp $
  */
 
 #include "vfs2perl.h"
@@ -104,7 +104,7 @@ Returns a GnomeVFSResult and a GnomeVFSDirectoryHandle.
 
 =cut
 ##  GnomeVFSResult gnome_vfs_directory_open_from_uri (GnomeVFSDirectoryHandle **handle, GnomeVFSURI *uri, GnomeVFSFileInfoOptions options) 
-GnomeVFSResult
+void
 gnome_vfs_directory_open_from_uri (class, uri, options)
 	GnomeVFSURI *uri
 	GnomeVFSFileInfoOptions options

@@ -4,12 +4,11 @@ use Gnome2::VFS;
 
 use Test::More tests => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFS.t,v 1.2 2003/11/07 19:55:58 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFS.t,v 1.3 2003/12/12 23:08:13 kaffeetisch Exp $
 
 ###############################################################################
 
 Gnome2::VFS -> init();
-
 ok(Gnome2::VFS -> initialized());
 
 ###############################################################################
