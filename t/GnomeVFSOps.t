@@ -4,7 +4,7 @@ use Gnome2::VFS -init;
 
 use Test::More tests => 44;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.9 2003/12/12 23:08:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.10 2004/01/29 16:01:23 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -84,7 +84,7 @@ is($info -> { size }, 4);
 
 ($result, $info) = Gnome2::VFS::URI -> new(TMP . "/blu") -> get_file_info(qw(get-mime-type));
 is($result, "ok");
-is($info -> { mime_type }, "text/plain");
+ok(defined($info -> { mime_type }));
 
 ($result, $info) = $handle -> get_file_info(qw(default));
 is($result, "ok");

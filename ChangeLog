@@ -1,3 +1,124 @@
+2004/03/24 17:04 (+0100) kaffeetisch
+
+	* Makefile.PL
+	* README: Depend on Glib 1.040.
+
+	* NEWS
+	* VFS.pm: Version 1.00.
+
+2004/03/19 00:12 (+0100) kaffeetisch
+
+	* NEWS
+	* VFS.pm: Version 0.99.
+
+2004/03/14 21:25 (+0100) kaffeetisch
+
+	* t/GnomeVFSUtils.t: Don't be so strict with
+	make_uri_from_input_with_dirs and expand_initial_tilde: test only
+	if they return something defined.
+
+2004/03/11 15:49 (+0100) kaffeetisch
+
+	A NEWS
+	* MANIFEST
+	* VFS.pm: Version 0.98.
+
+2004/03/09 22:49 (+0100) kaffeetisch
+
+	* xs/GnomeVFSOps.xs (gnome_vfs_read): Croak if `bytes' is not
+	greater than 0 in order to prevent segfaults.  (Reported by James
+	Curbo)
+
+2004/03/03 20:28 (+0100) kaffeetisch
+
+	* t/GnomeVFSURI.t
+	* t/GnomeVFSUtils.t
+	* xs/GnomeVFS.xs: Adapt to the new version information
+	implementation policy.
+
+2004/03/01 01:08 (+0100) kaffeetisch
+
+	* VFS.pm: Version 0.96.
+
+2004/02/14 15:41 (+0100) kaffeetisch
+
+	* Makefile.PL: Actually specify which versions of EU::Depends and
+	PkgConfig we need in the eval test.
+
+2004/02/12 20:11 (+0100) kaffeetisch
+
+	* Makefile.PL
+	* README
+	* VFS.pm: Use correct version numbers for the dependencies.
+	Version 0.94.
+
+2004/02/11 20:43 (+0100) kaffeetisch
+
+	* Makefile.PL
+	* README
+	* VFS.pm: Version 0.92.
+
+2004/02/10 17:06 (+0100) kaffeetisch
+
+	Applying a patch from muppet.
+
+	A copyright.pod
+	A doctypes
+	* MANIFEST
+	* Makefile.PL
+	* gnome2perl.h: Use the new features of ExtUtils::Depends and
+	ExtUtils::PkgConfig.
+
+	* VFS.pm: Add the whole license statement to the documentation.
+
+	* downloader.pl: Use new Gtk2::CellRenderer derivation API.
+
+2004/01/30 00:53 (+0100) kaffeetisch
+
+	* README
+	* VFS.pm: Documentation updates.  Version 0.90.
+
+2004/01/29 17:00 (+0100) kaffeetisch
+
+	* t/GnomeVFSOps.t: Only check if the mime type is defined.
+
+	* xs/GnomeVFS.xs: Add a FIXME comment.
+
+2004/01/24 21:44 (-0500) rwmcfa1
+
+	* Makefile.PL: removed runtime_reqs stuff, replaced by the pkg-config 
+	trick
+	
+	* perl-Gnome2-VFS.spec.in: use pkg-config for Requires version
+
+2004/01/02 15:09 (-0500) rwmcfa1
+
+	* Makefile.PL: rpm stuff added
+
+	* perl-Gnome2-VFS.spec.in: initial import
+
+2003/12/31 02:21 (-0500) muppetman
+
+	* GnomeVFSAsync.xs: include gnome-vfs-job-limit.h to quell
+	undeclared function warnings.
+
+2003/12/29 16:32 (-0500) rwmcfa1
+
+	* Makefile.PL: added a build dep version for Gtk2
+
+2003/12/22 23:55 (-0500) muppetman
+
+	* xs/GnomeVFS.xs: use braces to disambiguate the ifelse, and thereby
+	shut up the compiler about it.
+
+	* xs/GnomeVFSMime.xs: remove unused variable.
+
+	* xs/GnomeVFSUtils.xs: not sure why that "warn;" was there.
+
+2003/12/23 01:30 (+0100) kaffeetisch
+
+	* Makefile.PL: Don't call do_pod_files twice.
+
 2003/12/22 01:19 (+0100) kaffeetisch
 
 	* META.yml

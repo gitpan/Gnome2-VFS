@@ -4,7 +4,7 @@ use Gnome2::VFS -init;
 
 use Test::More tests => 29;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.4 2003/12/12 23:08:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.5 2004/03/03 19:24:29 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -24,7 +24,7 @@ ok(not $uri -> is_local());
 
 SKIP: {
   skip("resolve_relative, it changed in 2.3.1", 1)
-    unless (join("", Gnome2::VFS -> get_version_info()) >= 231);
+    unless (Gnome2::VFS -> CHECK_VERSION(2, 3, 1));
 
   is($uri -> resolve_relative("bla.html") -> to_string(), "http://www.freenet.de/bla.html");
 }

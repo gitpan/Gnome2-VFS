@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.10 2003/12/19 01:48:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.11 2003/12/23 05:07:30 muppetman Exp $
  */
 
 #include "vfs2perl.h"
@@ -353,7 +353,6 @@ gnome_vfs_url_show_with_env (class, url, env_ref)
     PREINIT:
 	char **envp;
     CODE:
-	warn;
 	envp = SvGnomeVFSCharArray (env_ref);
 	RETVAL = gnome_vfs_url_show_with_env (url, envp);
 	g_free (envp);

@@ -1,13 +1,18 @@
 ChangeLog
-examples/downloader.pl
-genmaps.pl
 LICENSE
-Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-maps
 META.yml			Module meta-data (added by MakeMaker)
+Makefile.PL
+NEWS
 README
+VFS.pm
+copyright.pod
+doctypes
+examples/downloader.pl
+genmaps.pl
+maps
+perl-Gnome2-VFS.spec.in
 t/GnomeVFS.t
 t/GnomeVFSApplicationRegistry
 t/GnomeVFSAsync
@@ -18,7 +23,6 @@ t/GnomeVFSOps.t
 t/GnomeVFSURI.t
 t/GnomeVFSUtils.t
 t/GnomeVFSXfer.t
-VFS.pm
 vfs.typemap
 vfs2perl.c
 vfs2perl.h

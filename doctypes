@@ -1,0 +1,4 @@
+GnomeVFSFileSize        unsigned
+GnomeVFSFileOffset      unsigned
+GnomeVFSMimeApplication Gnome2::VFS::Mime::Application
+GnomeVFSFileInfo        Gnome2::VFS::FileInfo

@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.10 2003/12/21 14:17:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.20 2004/03/24 15:54:58 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -12,7 +12,7 @@ require DynaLoader;
 
 our @ISA = qw(DynaLoader);
 
-our $VERSION = '0.10';
+our $VERSION = '1.00';
 
 sub import {
   my $self = shift();
@@ -111,8 +111,9 @@ Gnome2::VFS - Perl interface to the 2.x series of the GNOME VFS library
 
 =head1 ABSTRACT
 
-Perl bindings to the 2.x series of the GNOME VFS library.  This module allows
-you to interface with the gnome-vfs libraries.
+This module allows you to interface with the GNOME Virtual File System library.
+It provides the means to transparently access files on all kinds of
+filesystems.
 
 =head1 DESCRIPTION
 
@@ -137,8 +138,8 @@ There are some memory leaks especially with respect to callbacks.  This mainly
 affects GnomeVFSAsync as well as some parts of GnomeVFSXfer and GnomeVFSOps.
 GnomeVFSMime leaks some list data.
 
-GnomeVFSAsync is also known to crash occasionally when there are many
-concurrent transfers.
+GnomeVFSAsync is also known to crash under certain conditions when there are
+many concurrent transfers.
 
 =head1 SEE ALSO
 
@@ -151,6 +152,20 @@ Torsten Schoenfeld E<lt>kaffeetisch@web.deE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003 by the gtk2-perl team
+Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS)
+
+This library is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation; either version 2.1 of the License, or (at your option) any
+later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with this library; if not, write to the Free Software Foundation, Inc.,
+59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 =cut

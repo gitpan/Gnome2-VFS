@@ -1,0 +1,16 @@
+Overview of changes in Gnome2-VFS 1.00
+======================================
+
+* Depend on Glib 1.040.
+
+Overview of changes in Gnome2-VFS 0.99
+======================================
+
+* Made some tests a bit more tolerant.
+
+Overview of changes in Gnome2-VFS 0.98
+======================================
+
+* Fixed version information implementation to stick to the new policy.
+* Fixed bug in Gnome2::VFS::read that would result in a segfault when
+  called with a bytes argument that is not greater than 0.

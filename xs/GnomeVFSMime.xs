@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.5 2003/12/19 17:26:26 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.6 2003/12/23 05:07:23 muppetman Exp $
  */
 
 #include "vfs2perl.h"
@@ -177,7 +177,7 @@ gnome_vfs_mime_id_in_application_list (class, id, ...)
 	const char *id
     PREINIT:
 	int i;
-	GList *applications = NULL, *j;
+	GList *applications = NULL;
     CODE:
 	for (i = 2; i < items; i++)
 		applications = g_list_append (applications, SvGnomeVFSMimeApplication (ST (i)));

@@ -9,8 +9,7 @@ use Gnome2::VFS -init;
 package Gtk2::CellRendererProgress;
 
 use Glib::Object::Subclass
-  "Gtk2::CellRenderer",
-  signals => {},
+  Gtk2::CellRenderer::,
   properties => [
     Glib::ParamSpec -> double("progress",
                               "Progress",
@@ -19,7 +18,6 @@ use Glib::Object::Subclass
                               [qw(readable writable)])
   ]
 ;
-__PACKAGE__->_install_overrides;
 
 use constant x_padding => 2;
 use constant y_padding => 3;
@@ -29,7 +27,7 @@ sub INIT_INSTANCE {
   $self -> { progress } = 0.0;
 }
 
-sub on_get_size {
+sub GET_SIZE {
   my ($cell, $widget, $cell_area) = @_;
   my ($width, $height) = (100, 10);
 
@@ -44,9 +42,9 @@ sub on_get_size {
           $height + y_padding * 2);
 }
 
-sub on_render {
+sub RENDER {
   my ($cell, $window, $widget, $background_area, $cell_area, $expose_area, $flags) = @_;
-  my ($x_offset, $y_offset, $width, $height) = $cell -> on_get_size($widget, $cell_area);
+  my ($x_offset, $y_offset, $width, $height) = $cell -> GET_SIZE($widget, $cell_area);
 
   if ($cell -> { progress } > 0) {
     $widget -> get_style -> paint_box($window,

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.18 2003/12/19 01:48:32 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.19 2004/03/09 21:42:40 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -225,12 +225,17 @@ gnome_vfs_read (handle, bytes)
 	GnomeVFSResult result;
 	GnomeVFSFileSize bytes_read = bytes;
     PPCODE:
+	if (! bytes > 0)
+		croak ("The number of bytes to read must be greater than 0");
+
 	buffer = g_new0 (char, bytes);
 	result = gnome_vfs_read (handle, buffer, bytes, &bytes_read);
+
 	EXTEND (sp, 3);
 	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
 	PUSHs (sv_2mortal (newSVuv (bytes_read)));
 	PUSHs (sv_2mortal (newSVpv (buffer, bytes_read)));
+
 	g_free (buffer);
 
 =for apidoc

@@ -5,18 +5,20 @@ use ExtUtils::MakeMaker;
 use Cwd;
 use File::Spec;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/Makefile.PL,v 1.11 2003/12/19 17:26:24 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/Makefile.PL,v 1.20 2004/03/24 15:54:58 kaffeetisch Exp $
 
 our %build_reqs = (
-  'perl-ExtUtils-Depends'   => '0.1',
-  'perl-ExtUtils-PkgConfig' => '0.1',
-  'perl-Glib'               => '1.01',
+  'perl-ExtUtils-Depends'   => '0.20',
+  'perl-ExtUtils-PkgConfig' => '1.03',
+  'perl-Glib'               => '1.04',
+  'perl-Gtk2'               => '1.02',
   'GnomeVFS'                => '2.0.0',
 );
 
-unless (eval "use ExtUtils::Depends;"
-           . "use ExtUtils::PkgConfig;"
+unless (eval "use ExtUtils::Depends '$build_reqs{'perl-ExtUtils-Depends'}';"
+           . "use ExtUtils::PkgConfig '$build_reqs{'perl-ExtUtils-PkgConfig'}';"
            . "use Glib '$build_reqs{'perl-Glib'}';"
+           . "use Gtk2 '$build_reqs{'perl-Gtk2'}';"
            . "use Glib::MakeHelper;"
 	   . "use Gtk2::CodeGen;"
            . "1") {
@@ -24,8 +26,8 @@ unless (eval "use ExtUtils::Depends;"
   WriteMakefile(
     PREREQ_FATAL => 1,
     PREREQ_PM    => {
-      "Gtk2"                => $build_reqs{'perl-Gtk2'},
       "Glib"                => $build_reqs{'perl-Glib'},
+      "Gtk2"                => $build_reqs{'perl-Gtk2'},
       "ExtUtils::Depends"   => $build_reqs{'perl-ExtUtils-Depends'},
       "ExtUtils::PkgConfig" => $build_reqs{'perl-ExtUtils-PkgConfig'},
     },
@@ -34,7 +36,6 @@ unless (eval "use ExtUtils::Depends;"
 }
 
 my %vfs_pkgcfg = ExtUtils::PkgConfig->find("gnome-vfs-2.0 >= $build_reqs{GnomeVFS}");
-my %cfgs = (vfs => \%vfs_pkgcfg);
 
 ###############################################################################
 
@@ -92,31 +93,17 @@ our %pod_files = (
   Glib::MakeHelper->do_pod_files (@xs_files),
 );
 
-Glib::MakeHelper->do_pod_files (@xs_files);
-
 Gtk2::CodeGen->parse_maps ('vfs2perl');
 Gtk2::CodeGen->write_boot (ignore => qr/^Gnome2::VFS$/);
 
-open VERSION, ">build/vfs2perl-version.h" or die("Opening '>build/vfs2perl-version.h': $!");
-
-foreach my $pkg (keys %cfgs) {
-  my $stem = uc $pkg;
-  my @modversion = split /\./, $cfgs{$pkg}{modversion};
-  print VERSION "#define $stem\_MAJOR_VERSION   ($modversion[0])\n";
-  print VERSION "#define $stem\_MINOR_VERSION   ($modversion[1])\n";
-  print VERSION "#define $stem\_MICRO_VERSION   ($modversion[2])\n";
-  print VERSION "#define $stem\_CHECK_VERSION(major,minor,micro) \\\n"
-    . "    ($stem\_MAJOR_VERSION > (major) || \\\n"
-    . "     ($stem\_MAJOR_VERSION == (major) && $stem\_MINOR_VERSION > (minor)) || \\\n"
-    . "     ($stem\_MAJOR_VERSION == (major) && $stem\_MINOR_VERSION == (minor) && \\\n"
-    . "      $stem\_MICRO_VERSION >= (micro)))\n";
-}
-
-close VERSION;
+ExtUtils::PkgConfig->write_version_macros (
+  "build/vfs2perl-version.h",
+  "gnome-vfs-2.0" => "VFS",
+);
 
 ###############################################################################
 
-my $vfs = ExtUtils::Depends->new ('Gnome2::VFS', 'Gtk2', 'Glib');
+my $vfs = ExtUtils::Depends->new ('Gnome2::VFS', 'Gtk2');
 $vfs->set_inc ($vfs_pkgcfg{cflags});
 $vfs->set_libs ($vfs_pkgcfg{libs});
 $vfs->add_xs (@xs_files);
@@ -124,12 +111,12 @@ $vfs->add_c ("vfs2perl.c");
 $vfs->add_c ("build/vfs2perl-gtypes.c") if ($needs_gtypes);
 $vfs->add_pm ('VFS.pm' => '$(INST_LIBDIR)/VFS.pm');
 $vfs->add_typemaps (map {File::Spec->catfile(cwd(), $_)} 'build/vfs2perl.typemap', 'vfs.typemap');
-$vfs->add_headers ('vfs2perl.h');
 
 $vfs->install (qw(vfs2perl.h
                   build/vfs2perl-autogen.h
                   build/vfs2perl-version.h
-                  build/vfs2perl-gtypes.h));
+                  build/vfs2perl-gtypes.h
+                  doctypes));
 $vfs->save_config ('build/IFiles.pm');
 
 WriteMakefile(
@@ -143,11 +130,20 @@ WriteMakefile(
 
 ###############################################################################
 
-package MY;
-
-sub postamble {
+sub MY::postamble {
   return Glib::MakeHelper->postamble_clean ()
-       . Glib::MakeHelper->postamble_docs (@main::xs_files);
+       . Glib::MakeHelper->postamble_docs_full (
+		DEPENDS => $vfs,
+		DOCTYPES => 'doctypes',
+		COPYRIGHT_FROM => 'copyright.pod'
+         )
+       . Glib::MakeHelper->postamble_rpms (
+		'GNOME_VFS' => $build_reqs{'GnomeVFS'},
+		'PERL_EXTUTILS_DEPENDS' => 
+			$build_reqs{'perl-ExtUtils-Depends'},
+		'PERL_EXTUTILS_PKGCONFIG' => 
+			$build_reqs{'perl-ExtUtils-PkgConfig'},
+		'PERL_GLIB' => $build_reqs{'perl-Glib'},
+		'PERL_GTK' => $build_reqs{'perl-Gtk2'},
+	);
 }
-
-package MAIN;

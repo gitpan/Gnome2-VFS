@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.16 2003/12/19 17:26:26 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.19 2004/03/03 19:24:29 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -96,7 +96,7 @@ char **SvEnvArray (SV *ref)
 {
 	char **result = NULL;
 
-	if (SvOK (ref))
+	if (SvOK (ref)) {
 		if (SvRV (ref) && SvTYPE (SvRV (ref)) == SVt_PVAV) {
 			AV *array = (AV *) SvRV (ref);
 			SV **string;
@@ -112,6 +112,7 @@ char **SvEnvArray (SV *ref)
 		}
 		else
 			croak ("the environment parameter must be an array reference");
+	}
 
 	return result;
 }
@@ -191,7 +192,7 @@ Returns the major, minor and micro version numbers of GnomeVFS.
 
 =cut
 void
-gnome_vfs_get_version_info (class)
+GET_VERSION_INFO (class)
     PPCODE:
 	PERL_UNUSED_VAR (ax);
 	EXTEND (SP, 3);
@@ -200,7 +201,7 @@ gnome_vfs_get_version_info (class)
 	PUSHs (sv_2mortal (newSViv (VFS_MICRO_VERSION)));
 
 bool
-gnome_vfs_check_version (class, major, minor, micro)
+CHECK_VERSION (class, major, minor, micro)
 	int major
 	int minor
 	int micro
@@ -247,6 +248,7 @@ gnome_vfs_get_mime_type (class, text_uri)
     CLEANUP:
 	g_free (RETVAL);
 
+# FIXME: implement.
 ###  const char *gnome_vfs_get_mime_type_for_data (gconstpointer data, int data_size)
 #const char *
 #gnome_vfs_get_mime_type_for_data (data, data_size)
