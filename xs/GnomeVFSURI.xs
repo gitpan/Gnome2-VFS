@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSURI.xs,v 1.6 2003/11/23 21:48:37 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSURI.xs,v 1.6.2.1 2004/03/27 17:37:46 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -34,10 +34,6 @@ GnomeVFSURI_own *
 gnome_vfs_uri_resolve_relative (base, relative_reference)
 	const GnomeVFSURI *base
 	const gchar *relative_reference
-    CODE:
-	RETVAL = gnome_vfs_uri_resolve_relative (base, relative_reference);
-    OUTPUT:
-	RETVAL
 
 ###  GnomeVFSURI *gnome_vfs_uri_ref (GnomeVFSURI *uri) 
 #GnomeVFSURI *

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.6 2003/12/23 05:07:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.6.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -546,7 +546,7 @@ gnome_vfs_mime_application_new_from_id (class, id)
 
 ##  void gnome_vfs_mime_application_free (GnomeVFSMimeApplication *application) 
 
-#if VFS_CHECK_VERSION (2, 3, 1)
+#if VFS_CHECK_VERSION (2, 4, 0)
 
 =for apidoc
 

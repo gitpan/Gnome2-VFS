@@ -1,3 +1,21 @@
+Overview of changes in Gnome2-VFS 1.003
+=======================================
+
+* Make Gnome2::VFS::read_entire_file not crash on invalid input.
+* Fix a small test bug.
+* Don't depend on Gtk2 at runtime.
+
+Overview of changes in Gnome2-VFS 1.002
+=======================================
+
+* Hush compiler warnings that might occur under certain circumstances.
+
+Overview of changes in Gnome2-VFS 1.001
+=======================================
+
+* Made all version checks refer to stable releases.
+* Made the test suite more robust.
+
 Overview of changes in Gnome2-VFS 1.00
 ======================================
 

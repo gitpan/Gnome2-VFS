@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 use Cwd;
 use File::Spec;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/Makefile.PL,v 1.20 2004/03/24 15:54:58 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/Makefile.PL,v 1.20.2.2 2004/06/25 14:49:03 kaffeetisch Exp $
 
 our %build_reqs = (
   'perl-ExtUtils-Depends'   => '0.20',
@@ -54,8 +54,10 @@ if ($needs_gtypes) {
                       q(--fhead "#define __VFS2PERL_GTYPES_H__ 1\n\n" ) .
                       q(--fhead "#include <glib-object.h>\n\n" ) .
                       q(--fhead "G_BEGIN_DECLS\n\n" ) .
+                      q(--eprod "#ifndef GNOME_VFS_TYPE_@ENUMSHORT@\n" ) .
                       q(--eprod "#define GNOME_VFS_TYPE_@ENUMSHORT@ vfs2perl_@enum_name@_get_type()\n" ) .
                       q(--eprod "GType vfs2perl_@enum_name@_get_type (void);\n" ) .
+                      q(--eprod "#endif /* !GNOME_VFS_TYPE_@ENUMSHORT@ */\n" ) .
                       q(--ftail "G_END_DECLS\n\n" ) .
                       q(--ftail "#endif /* __VFS2PERL_GTYPES_H__ */\n" ) .
                       "@vfs_headers > build/vfs2perl-gtypes.h");
@@ -103,8 +105,8 @@ ExtUtils::PkgConfig->write_version_macros (
 
 ###############################################################################
 
-my $vfs = ExtUtils::Depends->new ('Gnome2::VFS', 'Gtk2');
-$vfs->set_inc ($vfs_pkgcfg{cflags});
+my $vfs = ExtUtils::Depends->new ('Gnome2::VFS', 'Glib');
+$vfs->set_inc ($vfs_pkgcfg{cflags} . " -I build");
 $vfs->set_libs ($vfs_pkgcfg{libs});
 $vfs->add_xs (@xs_files);
 $vfs->add_c ("vfs2perl.c");

@@ -1,10 +1,17 @@
 #!/usr/bin/perl -w
 use strict;
-use Gnome2::VFS -init;
+use Gnome2::VFS;
 
-use Test::More tests => 29;
+use Config;
+use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.5 2004/03/03 19:24:29 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.5.2.2 2004/03/27 17:37:46 kaffeetisch Exp $
+
+plan -d "$ENV{ HOME }/.gnome" ?
+  (tests => 29) :
+  (skip_all => "You have no ~/.gnome");
+
+Gnome2::VFS -> init();
 
 ###############################################################################
 
@@ -23,8 +30,11 @@ is($uri -> append_file_name("blo.html") -> to_string(), "http://www.freenet.de/b
 ok(not $uri -> is_local());
 
 SKIP: {
-  skip("resolve_relative, it changed in 2.3.1", 1)
-    unless (Gnome2::VFS -> CHECK_VERSION(2, 3, 1));
+  skip("resolve_relative, it changed in 2.4.0", 1)
+    unless (Gnome2::VFS -> CHECK_VERSION(2, 4, 0));
+
+  skip("resolve_relative is currently broken on 64bit platforms", 1)
+    if ($Config{ archname } =~ m/^(ia64|x86_64|alpha)/);
 
   is($uri -> resolve_relative("bla.html") -> to_string(), "http://www.freenet.de/bla.html");
 }

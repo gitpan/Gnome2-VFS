@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.11 2003/12/23 05:07:30 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.11.2.2 2004/06/25 14:11:05 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -64,7 +64,7 @@ gnome_vfs_format_file_size_for_display (class, size)
     CLEANUP:
 	g_free (RETVAL);
 
-#if VFS_CHECK_VERSION (2, 1, 3)
+#if VFS_CHECK_VERSION (2, 2, 0)
 
 ##  char *gnome_vfs_escape_string (const char *string) 
 char *
@@ -230,7 +230,7 @@ gnome_vfs_is_primary_thread (class)
     C_ARGS:
 	/* void */
 
-#if VFS_CHECK_VERSION (2, 1, 3)
+#if VFS_CHECK_VERSION (2, 2, 0)
 
 =for apidoc
 
@@ -250,7 +250,9 @@ gnome_vfs_read_entire_file (class, uri)
 	EXTEND (sp, 3);
 	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
 	PUSHs (sv_2mortal (newSViv (file_size)));
-	PUSHs (sv_2mortal (newSVpv (file_contents, file_size)));
+	PUSHs (sv_2mortal (file_size
+			   ? newSVpv (file_contents, file_size)
+			   : newSVsv (&PL_sv_undef)));
 
 ##  char * gnome_vfs_format_uri_for_display (const char *uri) 
 char *
@@ -272,7 +274,7 @@ gnome_vfs_make_uri_from_input (class, uri)
 
 #endif
 
-#if VFS_CHECK_VERSION (2, 3, 1)
+#if VFS_CHECK_VERSION (2, 4, 0)
 
 ##  char * gnome_vfs_make_uri_from_input_with_dirs (const char *uri, GnomeVFSMakeURIDirs dirs) 
 char *
@@ -286,7 +288,7 @@ gnome_vfs_make_uri_from_input_with_dirs (class, uri, dirs)
 
 #endif
 
-#if VFS_CHECK_VERSION (2, 1, 3)
+#if VFS_CHECK_VERSION (2, 2, 0)
 
 ##  char * gnome_vfs_make_uri_canonical_strip_fragment (const char *uri) 
 char *
@@ -336,7 +338,7 @@ gnome_vfs_make_uri_from_shell_arg (class, uri)
 
 #endif
 
-#if VFS_CHECK_VERSION (2, 3, 1)
+#if VFS_CHECK_VERSION (2, 4, 0)
 
 ##  GnomeVFSResult gnome_vfs_url_show (const char *url) 
 GnomeVFSResult

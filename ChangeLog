@@ -1,3 +1,66 @@
+2004/06/28 20:18 (+0200) kaffeetisch
+
+	* NEWS
+	* VFS.pm: Version 1.003.
+
+2004/06/25 16:47 (+0200) kaffeetisch
+
+	* vfs2perl.h
+	* Makefile.PL: Don't depend on Gtk2, since we actually don't need
+	to.  Instead, just include Glib's header, and add "-I build" to
+	the cflags.
+
+2004/06/25 16:09 (+0200) kaffeetisch
+
+	* t/GnomeVFSDirectory.t: Fix a test bug found by david d zuhn.
+
+	* t/GnomeVFSUtils.t
+	* xs/GnomeVFSUtils.xs: Patch by muppet fixes a crash found by
+	Gavin.
+
+2004/06/13 22:05 (+0200) kaffeetisch
+
+	* NEWS
+	* VFS.pm: Version 1.002.
+
+2004/06/13 21:52 (+0200) kaffeetisch
+
+	* Makefile.PL: Add guards around our custom GType definitions to
+	avoid compiler warnings that occur when Gnome2::VFS is not
+	recompiled after libgnomevfs was updated.
+
+2004/03/29 17:15 (+0100) kaffeetisch
+
+	* NEWS
+	* VFS.pm: Version 1.001.
+
+2004/03/27 18:44 (+0100) kaffeetisch
+
+	* t/GnomeVFSURI.t: Skip the resolve_relative test on 64bit
+	platforms since it causes segfaults.  (Found by Marc Brockschmidt)
+
+	* t/GnomeVFSURI.t
+	* t/GnomeVFSUtils.t: Check for stable versions only.
+
+	* GnomeVFSURI.xs (gnome_vfs_uri_resolve_relative): Remove needless
+	CODE and OUTPUT sections.
+
+2004/03/27 17:24 (+0100) kaffeetisch
+
+	* t/GnomeVFSAsync
+	* t/GnomeVFSDirectory.t
+	* t/GnomeVFSFileInfo.t 
+	* t/GnomeVFSMime
+	* t/GnomeVFSOps.t
+	* t/GnomeVFSURI.t 
+	* t/GnomeVFSUtils.t
+	* t/GnomeVFSXfer.t Skip all tests if there is no ~/.gnome
+	directory.  (Reported by Marc Brockschmidt)
+
+	* xs/GnomeVFSMime.xs
+	* xs/GnomeVFSUtils.xs: Make all version checks refer to stable
+	versions.
+
 2004/03/24 17:04 (+0100) kaffeetisch
 
 	* Makefile.PL

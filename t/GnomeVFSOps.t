@@ -1,10 +1,16 @@
 #!/usr/bin/perl -w
 use strict;
-use Gnome2::VFS -init;
+use Gnome2::VFS;
 
-use Test::More tests => 44;
+use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.10 2004/01/29 16:01:23 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.10.2.1 2004/03/27 16:17:56 kaffeetisch Exp $
+
+plan -d "$ENV{ HOME }/.gnome" ?
+  (tests => 44) :
+  (skip_all => "You have no ~/.gnome");
+
+Gnome2::VFS -> init();
 
 ###############################################################################
 
