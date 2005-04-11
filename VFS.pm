@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.26 2005/03/07 21:18:50 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.26.2.2 2005/04/11 18:44:46 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -12,7 +12,7 @@ require DynaLoader;
 
 our @ISA = qw(DynaLoader);
 
-our $VERSION = '1.020';
+our $VERSION = '1.021';
 
 sub import {
   my $self = shift();
@@ -120,14 +120,14 @@ filesystems.
 Since this module tries to stick very closely to the C API, the documentation
 found at
 
-  http://developer.gnome.org/doc/API/2.0/gnome-vfs-2.0/
+  L<http://developer.gnome.org/doc/API/2.0/gnome-vfs-2.0/>
 
 is the canonical reference.
 
 In addition to that, there's also the automatically generated API
-documentation: L<Gnome2::VFS::index>(3pm).
+documentation: L<Gnome2::VFS::index>.
 
-The mapping described in L<Gtk2::api>(3pm) also applies to this module.
+The mapping described in L<Gtk2::api> also applies to this module.
 
 To discuss this module, ask questions and flame/praise the authors, join
 gtk-perl-list@gnome.org at lists.gnome.org.
@@ -143,8 +143,7 @@ many concurrent transfers.
 
 =head1 SEE ALSO
 
-L<perl>(1), L<Gnome2::VFS::index>(3pm), L<Glib>(3pm), L<Gtk2>(3pm),
-L<Gtk2::api>(3pm).
+L<Gnome2::VFS::index>, L<Glib>, L<Gtk2>, L<Gtk2::api>.
 
 =head1 AUTHOR
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by the gtk2-perl team
+ * Copyright (C) 2003-2005 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,14 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.14 2004/07/29 17:36:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.15 2005/03/08 17:07:37 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
 
 /* ------------------------------------------------------------------------- */
 
-char **SvGnomeVFSCharArray (SV *ref)
+static char **
+SvGnomeVFSCharArray (SV *ref)
 {
 	char **result = NULL;
 

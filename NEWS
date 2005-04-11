@@ -1,3 +1,10 @@
+Overview of changes in Gnome2-VFS 1.021
+=======================================
+
+* Use simple opaque scalars instead of boxed types for several objects.
+* Some internal reorganization.
+* Documentation fixes.
+
 Overview of changes in Gnome2-VFS 1.020
 =======================================
 

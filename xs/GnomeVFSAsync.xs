@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSAsync.xs,v 1.12 2005/02/10 21:21:16 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSAsync.xs,v 1.13 2005/03/08 17:07:36 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -89,12 +89,7 @@ void vfs2perl_async_callbacks_destroy (GnomeVFSAsyncHandle *handle)
 static GPerlCallback *
 vfs2perl_async_callback_create (SV *func, SV *data)
 {
-	GType param_types [] = {
-		GNOME_VFS_TYPE_VFS_ASYNC_HANDLE,
-		GNOME_VFS_TYPE_VFS_RESULT
-	};
-	return gperl_callback_new (func, data, G_N_ELEMENTS (param_types),
-	                           param_types, 0);
+	return gperl_callback_new (func, data, 0, NULL, 0);
 }
 
 static void
@@ -102,7 +97,26 @@ vfs2perl_async_callback (GnomeVFSAsyncHandle *handle,
                          GnomeVFSResult result,
                          GPerlCallback *callback)
 {
-	gperl_callback_invoke (callback, NULL, handle, result);
+	dGPERL_CALLBACK_MARSHAL_SP;
+	GPERL_CALLBACK_MARSHAL_INIT (callback);
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	EXTEND (SP, 3);
+	PUSHs (sv_2mortal (newSVGnomeVFSAsyncHandle (handle)));
+	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
+	if (callback->data)
+		XPUSHs (sv_2mortal (newSVsv (callback->data)));
+
+	PUTBACK;
+
+	call_sv (callback->func, G_DISCARD);
+
+	FREETMPS;
+	LEAVE;
 }
 
 /* ------------------------------------------------------------------------- */

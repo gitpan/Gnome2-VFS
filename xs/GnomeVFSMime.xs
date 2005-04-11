@@ -15,122 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.9 2005/03/07 21:16:43 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.10 2005/03/08 17:07:36 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
 
 /* So we get those functions that were deprecated after we bound them. */
 #undef GNOME_VFS_DISABLE_DEPRECATED
-
-/* ------------------------------------------------------------------------- */
-
-const char *
-SvGnomeVFSMimeType (SV *object)
-{
-	MAGIC *mg;
-
-	if (!object || !SvOK (object) || !SvROK (object) || !(mg = mg_find (SvRV (object), PERL_MAGIC_ext)))
-		return NULL;
-
-	return (const char *) mg->mg_ptr;
-}
-
-SV *
-newSVGnomeVFSMimeType (const char *mime_type)
-{
-	SV *rv;
-	HV *stash;
-	SV *object = (SV *) newHV ();
-
-	sv_magic (object, 0, PERL_MAGIC_ext, mime_type, 0);
-
-	rv = newRV_noinc (object);
-	stash = gv_stashpv ("Gnome2::VFS::Mime::Type", 1);
-
-	return sv_bless (rv, stash);
-}
-
-/* ------------------------------------------------------------------------- */
-
-/* FIXME: leak? */
-SV *
-newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application)
-{
-	HV *hash = newHV ();
-
-	if (application == NULL)
-		return &PL_sv_undef;
-
-	hv_store (hash, "id", 2, newSVpv (application->id, PL_na), 0);
-	hv_store (hash, "name", 4, newSVpv (application->name, PL_na), 0);
-	hv_store (hash, "command", 7, newSVpv (application->command, PL_na), 0);
-	hv_store (hash, "can_open_multiple_files", 23, newSVuv (application->can_open_multiple_files), 0);
-	hv_store (hash, "expects_uris", 12, newSVGnomeVFSMimeApplicationArgumentType (application->expects_uris), 0);
-	hv_store (hash, "requires_terminal", 17, newSVuv (application->requires_terminal), 0);
-
-	if (application->supported_uri_schemes != NULL) {
-		AV *array = newAV ();
-		GList *i;
-
-		for (i = application->supported_uri_schemes; i != NULL; i = i->next)
-			av_push (array, newSVpv (i->data, PL_na));
-
-		hv_store (hash, "supported_uri_schemes", 21, newRV_noinc ((SV *) array), 0);
-	}
-
-	/* gnome_vfs_mime_application_free (application); */
-
-	return sv_bless (newRV_noinc ((SV *) hash),
-	                 gv_stashpv ("Gnome2::VFS::Mime::Application", 1));
-}
-
-/* FIXME: leak? */
-GnomeVFSMimeApplication *
-SvGnomeVFSMimeApplication (SV *object)
-{
-	GnomeVFSMimeApplication *application = gperl_alloc_temp (sizeof (GnomeVFSMimeApplication));
-
-	if (object && SvOK (object) && SvROK (object) && SvTYPE (SvRV (object)) == SVt_PVHV) {
-		HV *hv = (HV *) SvRV (object);
-		SV **value;
-
-		value = hv_fetch (hv, "id", 2, FALSE);
-		if (value) application->id = SvPV_nolen (*value);
-
-		value = hv_fetch (hv, "name", 4, FALSE);
-		if (value) application->name = SvPV_nolen (*value);
-
-		value = hv_fetch (hv, "command", 7, FALSE);
-		if (value) application->command = SvPV_nolen (*value);
-
-		value = hv_fetch (hv, "can_open_multiple_files", 23, FALSE);
-		if (value) application->can_open_multiple_files = SvUV (*value);
-
-		value = hv_fetch (hv, "expects_uris", 12, FALSE);
-		if (value) application->expects_uris = SvGnomeVFSMimeApplicationArgumentType (*value);
-
-		value = hv_fetch (hv, "requires_terminal", 17, FALSE);
-		if (value) application->requires_terminal = SvUV (*value);
-
-		value = hv_fetch (hv, "supported_uri_schemes", 21, FALSE);
-		if (value && *value && SvOK (*value) && SvROK (*value) && SvTYPE (SvRV (*value)) == SVt_PVAV) {
-			AV *array = (AV *) SvRV (*value);
-			int i;
-
-			application->supported_uri_schemes = NULL;
-
-			for (i = 0; i <= av_len (array); i++) {
-				value = av_fetch (array, i, 0);
-
-				if (value)
-					application->supported_uri_schemes = g_list_append (application->supported_uri_schemes, SvPV_nolen (*value));
-			}
-		}
-	}
-
-	return application;
-}
 
 /* ------------------------------------------------------------------------- */
 

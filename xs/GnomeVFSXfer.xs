@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by the gtk2-perl team
+ * Copyright (C) 2003-2005 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSXfer.xs,v 1.11 2003/12/18 21:33:04 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSXfer.xs,v 1.12 2005/03/08 17:07:37 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -23,44 +23,7 @@
 
 /* ------------------------------------------------------------------------- */
 
-SV *
-newSVGnomeVFSXferProgressInfo (GnomeVFSXferProgressInfo *info)
-{
-	HV * hv = newHV ();
-
-	if (info) {
-		hv_store (hv, "status", 6, newSVGnomeVFSXferProgressStatus (info->status), 0);
-		hv_store (hv, "vfs_status", 10, newSVGnomeVFSResult (info->vfs_status), 0);
-		hv_store (hv, "phase", 5, newSVGnomeVFSXferPhase (info->phase), 0);
-		hv_store (hv, "file_index", 10, newSVuv (info->file_index), 0);
-		hv_store (hv, "files_total", 11, newSVuv (info->files_total), 0);
-		hv_store (hv, "bytes_total", 11, newSVuv (info->bytes_total), 0);
-		hv_store (hv, "file_size", 9, newSVuv (info->file_size), 0);
-		hv_store (hv, "bytes_copied", 12, newSVuv (info->bytes_copied), 0);
-		hv_store (hv, "total_bytes_copied", 18, newSVuv (info->total_bytes_copied), 0);
-		hv_store (hv, "top_level_item", 14, newSVuv (info->top_level_item), 0);
-
-		if (info->source_name)
-			hv_store (hv, "source_name", 11, newSVGChar (info->source_name), 0);
-
-		if (info->target_name)
-			hv_store (hv, "target_name", 11, newSVGChar (info->target_name), 0);
-
-		if (info->duplicate_count)
-			hv_store (hv, "duplicate_count", 15, newSViv (info->duplicate_count), 0);
-
-		/* FIXME: add a version check once the fix from teuf makes it
-		          into an official release. */
-		if (info->duplicate_name && info->phase != GNOME_VFS_XFER_PHASE_COMPLETED)
-			hv_store (hv, "duplicate_name", 14, newSVGChar (info->duplicate_name), 0);
-	}
-
-	return newRV_noinc ((SV*) hv);
-}
-
-/* ------------------------------------------------------------------------- */
-
-gint
+static gint
 sv_to_int (GType type, SV *sv)
 {
 	int n;
@@ -100,6 +63,7 @@ vfs2perl_xfer_progress_callback (GnomeVFSXferProgressInfo *info,
 
 	call_sv (callback->func, G_SCALAR);
 
+	/* FIXME: Strange segfaults/aborts here. */
 	SPAGAIN;
 
 	if (info->status == GNOME_VFS_XFER_PROGRESS_STATUS_VFSERROR)

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSResolve.xs,v 1.1 2004/07/29 17:36:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSResolve.xs,v 1.2 2005/03/15 23:52:53 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -39,6 +39,12 @@ gnome_vfs_resolve (class, hostname)
 	}
 
 MODULE = Gnome2::VFS::Resolve	PACKAGE = Gnome2::VFS::Resolve::Handle	PREFIX = gnome_vfs_resolve_
+
+void
+DESTROY (handle)
+	GnomeVFSResolveHandle *handle
+    CODE:
+	gnome_vfs_resolve_free (handle);
 
 ##  gboolean gnome_vfs_resolve_next_address (GnomeVFSResolveHandle *handle, GnomeVFSAddress **address)
 GnomeVFSAddress_ornull *

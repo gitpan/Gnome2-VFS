@@ -15,163 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.21 2004/08/08 13:19:06 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFS.xs,v 1.22 2005/03/08 17:07:36 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
-
-/* ------------------------------------------------------------------------- */
-
-SV *
-newSVGnomeVFSFileSize (GnomeVFSFileSize size)
-{
-	return newSVuv (size);
-}
-
-GnomeVFSFileSize
-SvGnomeVFSFileSize (SV *size)
-{
-	return SvUV (size);
-}
-
-SV *
-newSVGnomeVFSFileOffset (GnomeVFSFileOffset offset)
-{
-	return newSViv (offset);
-}
-
-GnomeVFSFileOffset
-SvGnomeVFSFileOffset (SV *offset)
-{
-	return SvIV (offset);
-}
-
-/* ------------------------------------------------------------------------- */
-
-GList *
-SvPVGList (SV *ref)
-{
-	int i;
-
-	AV *array;
-	SV **value;
-
-	GList *list = NULL;
-
-	if (! (SvRV (ref) && SvTYPE (SvRV (ref)) == SVt_PVAV))
-		croak ("URI list has to be a reference to an array");
-
-	array = (AV *) SvRV (ref);
-
-	for (i = 0; i <= av_len (array); i++)
-		if ((value = av_fetch (array, i, 0)) && SvOK (*value))
-			list = g_list_append(list, SvPV_nolen (*value));
-
-	return list;
-}
-
-GList *
-SvGnomeVFSURIGList (SV *ref)
-{
-	int i;
-
-	AV *array;
-	SV **value;
-
-	GList *list = NULL;
-
-	if (! (SvRV (ref) && SvTYPE (SvRV (ref)) == SVt_PVAV))
-		croak ("URI list has to be a reference to an array");
-
-	array = (AV *) SvRV (ref);
-
-	for (i = 0; i <= av_len (array); i++)
-		if ((value = av_fetch (array, i, 0)) && SvOK (*value))
-			list = g_list_append(list, SvGnomeVFSURI (*value));
-
-	return list;
-}
-
-char **SvEnvArray (SV *ref)
-{
-	char **result = NULL;
-
-	if (SvOK (ref)) {
-		if (SvRV (ref) && SvTYPE (SvRV (ref)) == SVt_PVAV) {
-			AV *array = (AV *) SvRV (ref);
-			SV **string;
-
-			int i, length = av_len (array);
-			result = g_new0 (char *, length + 2);
-
-			for (i = 0; i <= length; i++)
-				if ((string = av_fetch (array, i, 0)) && SvOK (*string))
-					result[i] = SvPV_nolen (*string);
-
-			result[length + 1] = NULL;
-		}
-		else
-			croak ("the environment parameter must be an array reference");
-	}
-
-	return result;
-}
-
-SV *
-newSVGnomeVFSFileInfoGList (GList *list)
-{
-	AV *array = newAV ();
-
-	for (; list != NULL; list = list->next)
-		av_push (array, newSVGnomeVFSFileInfo (list->data));
-
-	return newRV_noinc ((SV *) array);
-}
-
-SV *
-newSVGnomeVFSGetFileInfoResultGList (GList *list)
-{
-	AV *array = newAV ();
-
-	for (; list != NULL; list = list->next) {
-		HV *hash = newHV ();
-		GnomeVFSGetFileInfoResult* result = list->data;
-
-		gnome_vfs_uri_ref (result->uri);
-
-		hv_store (hash, "uri", 3, newSVGnomeVFSURI (result->uri), 0);
-		hv_store (hash, "result", 6, newSVGnomeVFSResult (result->result), 0);
-		hv_store (hash, "file_info", 9, newSVGnomeVFSFileInfo (result->file_info), 0);
-
-		av_push (array, newRV_noinc ((SV *) hash));
-	}
-
-	return newRV_noinc ((SV *) array);
-}
-
-SV *
-newSVGnomeVFSFindDirectoryResultGList (GList *list)
-{
-	AV *array = newAV ();
-
-	for (; list != NULL; list = list->next) {
-		HV *hash = newHV ();
-		GnomeVFSFindDirectoryResult* result = list->data;
-
-		hv_store (hash, "result", 6, newSVGnomeVFSResult (result->result), 0);
-
-		if (result->uri) {
-			gnome_vfs_uri_ref (result->uri);
-			hv_store (hash, "uri", 3, newSVGnomeVFSURI (result->uri), 0);
-		}
-
-		av_push (array, newRV_noinc ((SV *) hash));
-	}
-
-	return newRV_noinc ((SV *) array);
-}
-
-/* ------------------------------------------------------------------------- */
 
 MODULE = Gnome2::VFS	PACKAGE = Gnome2::VFS	PREFIX = gnome_vfs_
 
@@ -180,11 +27,9 @@ MODULE = Gnome2::VFS	PACKAGE = Gnome2::VFS	PREFIX = gnome_vfs_
 =cut
 
 BOOT:
-{
 #include "register.xsh"
 #include "boot.xsh"
 	gperl_handle_logs_for ("libgnomevfs");
-}
 
 =for apidoc
 

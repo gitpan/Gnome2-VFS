@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.h,v 1.18 2005/03/07 21:15:58 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.h,v 1.19 2005/03/08 17:07:13 kaffeetisch Exp $
  */
 
 #ifndef _VFS2PERL_H_
@@ -31,42 +31,18 @@
 #include <libgnomevfs/gnome-vfs-mime-monitor.h>
 #include <libgnomevfs/gnome-vfs-application-registry.h>
 
+#if VFS_CHECK_VERSION (2, 8, 0)
+
+#include <libgnomevfs/gnome-vfs-dns-sd.h>
+#include <libgnomevfs/gnome-vfs-address.h>
+#include <libgnomevfs/gnome-vfs-resolve.h>
+
+#endif /* 2.8 */
+
 /* ------------------------------------------------------------------------- */
 
 #define GNOME_VFS_TYPE_VFS_URI (vfs2perl_gnome_vfs_uri_get_type ())
 GType vfs2perl_gnome_vfs_uri_get_type (void) G_GNUC_CONST;
-
-#define GNOME_VFS_TYPE_VFS_HANDLE (vfs2perl_gnome_vfs_handle_get_type ())
-GType vfs2perl_gnome_vfs_handle_get_type (void) G_GNUC_CONST;
-
-#define GNOME_VFS_TYPE_VFS_MONITOR_HANDLE (vfs2perl_gnome_vfs_monitor_handle_get_type ())
-GType vfs2perl_gnome_vfs_monitor_handle_get_type (void) G_GNUC_CONST;
-
-#define GNOME_VFS_TYPE_VFS_DIRECTORY_HANDLE (vfs2perl_gnome_vfs_directory_handle_get_type ())
-GType vfs2perl_gnome_vfs_directory_handle_get_type (void) G_GNUC_CONST;
-
-#define GNOME_VFS_TYPE_VFS_ASYNC_HANDLE (vfs2perl_gnome_vfs_async_handle_get_type ())
-GType vfs2perl_gnome_vfs_async_handle_get_type (void) G_GNUC_CONST;
-
-/* ------------------------------------------------------------------------- */
-
-#if VFS_CHECK_VERSION (2, 8, 0)
-
-#include <libgnomevfs/gnome-vfs-dns-sd.h>
-
-#define GNOME_VFS_TYPE_VFS_DNS_SD_BROWSE_HANDLE (vfs2perl_gnome_vfs_dns_sd_browse_handle_get_type ())
-GType vfs2perl_gnome_vfs_dns_sd_browse_handle_get_type (void) G_GNUC_CONST;
-
-#define GNOME_VFS_TYPE_VFS_DNS_SD_RESOLVE_HANDLE (vfs2perl_gnome_vfs_dns_sd_resolve_handle_get_type ())
-GType vfs2perl_gnome_vfs_dns_sd_resolve_handle_get_type (void) G_GNUC_CONST;
-
-#include <libgnomevfs/gnome-vfs-address.h>
-#include <libgnomevfs/gnome-vfs-resolve.h>
-
-#define GNOME_VFS_TYPE_VFS_RESOLVE_HANDLE (vfs2perl_gnome_vfs_resolve_handle_get_type ())
-GType vfs2perl_gnome_vfs_resolve_handle_get_type (void) G_GNUC_CONST;
-
-#endif /* 2.8 */
 
 /* ------------------------------------------------------------------------- */
 
@@ -93,19 +69,38 @@ GnomeVFSFileSize SvGnomeVFSFileSize (SV *size);
 SV * newSVGnomeVFSFileOffset (GnomeVFSFileOffset offset);
 GnomeVFSFileOffset SvGnomeVFSFileOffset (SV *offset);
 
-/* ------------------------------------------------------------------------- */
+SV * newSVGnomeVFSHandle (GnomeVFSHandle *handle);
+GnomeVFSHandle * SvGnomeVFSHandle (SV *handle);
+
+SV * newSVGnomeVFSMonitorHandle (GnomeVFSMonitorHandle *handle);
+GnomeVFSMonitorHandle * SvGnomeVFSMonitorHandle (SV *handle);
+
+SV * newSVGnomeVFSDirectoryHandle (GnomeVFSDirectoryHandle *handle);
+GnomeVFSDirectoryHandle * SvGnomeVFSDirectoryHandle (SV *handle);
+
+SV * newSVGnomeVFSAsyncHandle (GnomeVFSAsyncHandle *handle);
+GnomeVFSAsyncHandle * SvGnomeVFSAsyncHandle (SV *handle);
+
+#if VFS_CHECK_VERSION (2, 8, 0)
+
+SV * newSVGnomeVFSDNSSDBrowseHandle (GnomeVFSDNSSDBrowseHandle *handle);
+GnomeVFSDNSSDBrowseHandle * SvGnomeVFSDNSSDBrowseHandle (SV *handle);
+
+SV * newSVGnomeVFSDNSSDResolveHandle (GnomeVFSDNSSDResolveHandle *handle);
+GnomeVFSDNSSDResolveHandle * SvGnomeVFSDNSSDResolveHandle (SV *handle);
+
+SV * newSVGnomeVFSResolveHandle (GnomeVFSResolveHandle *handle);
+GnomeVFSResolveHandle * SvGnomeVFSResolveHandle (SV *handle);
+
+#endif /* 2.8 */
 
 typedef const char GnomeVFSApplication;
-
 const char * SvGnomeVFSApplication (SV *object);
 SV * newSVGnomeVFSApplication (const char *app_id);
 
 typedef const char GnomeVFSMimeType;
-
 const char * SvGnomeVFSMimeType (SV *object);
 SV * newSVGnomeVFSMimeType (const char *mime_type);
-
-/* ------------------------------------------------------------------------- */
 
 SV * newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application);
 GnomeVFSMimeApplication * SvGnomeVFSMimeApplication (SV *object);
