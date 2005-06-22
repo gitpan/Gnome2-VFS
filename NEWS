@@ -1,3 +1,9 @@
+Overview of changes in Gnome2-VFS 1.022
+=======================================
+
+* Add a monitor example.  [Christian Borup]
+* Fix a testsuite issue.
+
 Overview of changes in Gnome2-VFS 1.021
 =======================================
 

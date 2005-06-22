@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 use Cwd;
 use File::Spec;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/Makefile.PL,v 1.25 2005/03/07 21:18:49 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/Makefile.PL,v 1.25.2.1 2005/06/22 22:29:36 kaffeetisch Exp $
 
 our %build_reqs = (
   'perl-ExtUtils-Depends'   => '0.20',
@@ -13,6 +13,13 @@ our %build_reqs = (
   'perl-Glib'               => '1.06',
   'perl-Gtk2'               => '1.02',
   'GnomeVFS'                => '2.0.0',
+);
+
+our %PREREQ_PM = (
+  "Glib"                => $build_reqs{'perl-Glib'},
+  "Gtk2"                => $build_reqs{'perl-Gtk2'},
+  "ExtUtils::Depends"   => $build_reqs{'perl-ExtUtils-Depends'},
+  "ExtUtils::PkgConfig" => $build_reqs{'perl-ExtUtils-PkgConfig'},
 );
 
 unless (eval "use ExtUtils::Depends '$build_reqs{'perl-ExtUtils-Depends'}';"
@@ -25,12 +32,7 @@ unless (eval "use ExtUtils::Depends '$build_reqs{'perl-ExtUtils-Depends'}';"
   warn "$@\n";
   WriteMakefile(
     PREREQ_FATAL => 1,
-    PREREQ_PM    => {
-      "Glib"                => $build_reqs{'perl-Glib'},
-      "Gtk2"                => $build_reqs{'perl-Gtk2'},
-      "ExtUtils::Depends"   => $build_reqs{'perl-ExtUtils-Depends'},
-      "ExtUtils::PkgConfig" => $build_reqs{'perl-ExtUtils-PkgConfig'},
-    },
+    PREREQ_PM    => \%PREREQ_PM,
   );
   exit 1; # not reached
 }
@@ -131,6 +133,7 @@ WriteMakefile(
   NAME            => 'Gnome2::VFS',
   VERSION_FROM    => 'VFS.pm', # finds $VERSION
   ABSTRACT_FROM   => 'VFS.pm', # retrieve abstract from module
+  PREREQ_PM       => \%PREREQ_PM,
   XSPROTOARG      => '-noprototypes',
   MAN3PODS        => \%pod_files,
   $vfs->get_makefile_vars,

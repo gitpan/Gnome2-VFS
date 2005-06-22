@@ -1,3 +1,24 @@
+2005/06/23	kaffeetisch
+
+	* META.yml, NEWS, VFS.pm: Stable release 1.022.
+
+2005/06/23	kaffeetisch
+
+	Merge from HEAD:
+
+	* t/GnomeVFSFileInfo.t: Use is() instead of is_deeply() to test
+	flags values since the latter was changed to always use the string
+	version of overloaded objects in recent versions of Test::More,
+	whereas the former seems to work correctly.  Tested with
+	Test::More 0.45 and 0.60.
+
+	* Makefile.PL: Specify PREREQ_PM in the WriteMakefile call so
+	META.yml gets generated correctly.
+
+	* MANIFEST, examples/monitor.pl: Add simple example of a monitor.
+
+	* MANIFEST, genmaps.pl: Retire genmaps.pl.
+
 2005/04/11	kaffeetisch
 
 	* META.yml, NEWS, VFS.pm: Stable release 1.021.

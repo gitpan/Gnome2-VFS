@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.26.2.2 2005/04/11 18:44:46 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.26.2.3 2005/06/22 23:05:32 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -12,7 +12,7 @@ require DynaLoader;
 
 our @ISA = qw(DynaLoader);
 
-our $VERSION = '1.021';
+our $VERSION = '1.022';
 
 sub import {
   my $self = shift();

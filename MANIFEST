@@ -10,7 +10,7 @@ VFS.pm
 copyright.pod
 doctypes
 examples/downloader.pl
-genmaps.pl
+examples/monitor.pl
 maps-2.0
 maps-2.6
 maps-2.8
