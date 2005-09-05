@@ -2,7 +2,6 @@ ChangeLog
 LICENSE
 MANIFEST			This list of files
 MANIFEST.SKIP
-META.yml			Module meta-data (added by MakeMaker)
 Makefile.PL
 NEWS
 README
@@ -54,3 +53,4 @@ xs/GnomeVFSXfer.xs
 xs_files-2.0
 xs_files-2.6
 xs_files-2.8
+META.yml                                 Module meta-data (added by MakeMaker)

@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.26.2.3 2005/06/22 23:05:32 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.31 2005/09/05 19:07:15 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -8,34 +8,64 @@ use warnings;
 
 use Glib;
 
+require Exporter;
 require DynaLoader;
 
-our @ISA = qw(DynaLoader);
+our @ISA = qw(Exporter DynaLoader);
 
-our $VERSION = '1.022';
+our @EXPORT_OK = qw(
+  GNOME_VFS_PRIORITY_MIN
+  GNOME_VFS_PRIORITY_MAX
+  GNOME_VFS_PRIORITY_DEFAULT
+  GNOME_VFS_SIZE_FORMAT_STR
+  GNOME_VFS_OFFSET_FORMAT_STR
+  GNOME_VFS_MIME_TYPE_UNKNOWN
+  GNOME_VFS_URI_MAGIC_STR
+  GNOME_VFS_URI_PATH_STR
+);
+
+# --------------------------------------------------------------------------- #
+
+our $VERSION = '1.040';
 
 sub import {
-  my $self = shift();
+  my ($self) = @_;
+  my @symbols = ();
 
   foreach (@_) {
     if (/^-?init$/) {
       $self -> init();
-    }
-    else {
-      $self -> VERSION($_);
+    } else {
+      push @symbols, $_;
     }
   }
+
+  Gnome2::VFS -> export_to_level(1, @symbols);
 }
 
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
 Gnome2::VFS -> bootstrap($VERSION);
 
-# Preloaded methods go here.
+# --------------------------------------------------------------------------- #
+
+use constant GNOME_VFS_PRIORITY_MIN => -10;
+use constant GNOME_VFS_PRIORITY_MAX => 10;
+use constant GNOME_VFS_PRIORITY_DEFAULT => 0;
+
+use constant GNOME_VFS_SIZE_FORMAT_STR => "Lu";
+use constant GNOME_VFS_OFFSET_FORMAT_STR => "Ld";
+
+use constant GNOME_VFS_MIME_TYPE_UNKNOWN => "application/octet-stream";
+
+use constant GNOME_VFS_URI_MAGIC_STR => "#";
+use constant GNOME_VFS_URI_PATH_STR => "/";
 
 1;
+
+# --------------------------------------------------------------------------- #
+
 __END__
-# Below is stub documentation for your module. You'd better edit it!
 
 =head1 NAME
 

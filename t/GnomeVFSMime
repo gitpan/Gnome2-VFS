@@ -4,7 +4,7 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSMime,v 1.7 2005/03/07 21:16:45 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSMime,v 1.8 2005/03/20 23:44:44 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 16) :
@@ -18,7 +18,8 @@ my $monitor = Gnome2::VFS::Mime::Monitor -> get();
 isa_ok($monitor, "Gnome2::VFS::Mime::Monitor");
 
 my $type = Gnome2::VFS::Mime::Type -> new("text/html");
-my $application = $type -> get_default_application();
+my $application = $type -> get_default_application_for_uri("http://www.google.com");
+$application = $type -> get_default_application();
 
 SKIP: {
   skip("you don't seem to have a default application associated with text/html", 8)
@@ -37,11 +38,13 @@ SKIP: {
 
   isa_ok(($type -> get_short_list_applications())[0], "Gnome2::VFS::Mime::Application");
   isa_ok(($type -> get_all_applications())[0], "Gnome2::VFS::Mime::Application");
+  isa_ok(($type -> get_all_applications_for_uri("http://www.google.com"))[0], "Gnome2::VFS::Mime::Application");
 }
 
 TODO: {
   local $TODO = "hrm";
   isa_ok(Gnome2::VFS::Mime::Application -> new_from_id("epiphany"), "Gnome2::VFS::Mime::Application");
+  isa_ok(Gnome2::VFS::Mime::Application -> new_from_desktop_id("epiphany"), "Gnome2::VFS::Mime::Application");
 }
 
 # $type -> get_icon();

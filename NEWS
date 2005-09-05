@@ -1,3 +1,52 @@
+Overview of changes in Gnome2-VFS 1.040
+=======================================
+
+ Since 1.02x (the previous stable series)
+ ----------------------------------------
+  * Export some constants on demand.
+  * Add new API in Gnome2::VFS::Mime::Type, Gnome2::VFS::Mime::Application,
+    Gnome2::VFS::Handle and Gnome2::VFS.
+  * Fix Gnome2::VFS::make_uri_from_input_with_trailing_ws by adding the missing
+    class parameter.
+
+ Since 1.031
+ -----------
+  * Fix a test suite issue.
+
+Overview of changes in Gnome2-VFS 1.031
+=======================================
+
+* Add an example demonstrating Gnome2::VFS::Monitor.
+* Fix minor test suite issues.
+* Fix Gnome2::VFS::make_uri_from_input_with_trailing_ws by adding the missing
+  class parameter.
+
+Overview of changes in Gnome2-VFS 1.030
+=======================================
+
+* Export the following constants on demand GNOME_VFS_PRIORITY_MIN,
+  GNOME_VFS_PRIORITY_MAX, GNOME_VFS_PRIORITY_DEFAULT,
+  GNOME_VFS_SIZE_FORMAT_STR, GNOME_VFS_OFFSET_FORMAT_STR,
+  GNOME_VFS_MIME_TYPE_UNKNOWN, GNOME_VFS_URI_MAGIC_STR, and
+  GNOME_VFS_URI_PATH_STR.
+
+* Add Gnome2::VFS::Mime::Type::get_default_application_for_uri,
+  Gnome2::VFS::Mime::Type::get_all_applications_for_uri,
+  Gnome2::VFS::Mime::Application::new_from_desktop_id,
+  Gnome2::VFS::Mime::Application::get_desktop_id,
+  Gnome2::VFS::Mime::Application::get_desktop_file_path,
+  Gnome2::VFS::Mime::Application::get_name,
+  Gnome2::VFS::Mime::Application::get_generic_name,
+  Gnome2::VFS::Mime::Application::get_icon,
+  Gnome2::VFS::Mime::Application::get_exec,
+  Gnome2::VFS::Mime::Application::get_binary_name,
+  Gnome2::VFS::Mime::Application::supports_uris,
+  Gnome2::VFS::Mime::Application::requires_terminal,
+  Gnome2::VFS::Mime::Application::supports_startup_notification and
+  Gnome2::VFS::Mime::Application::get_startup_wm_class,
+  Gnome2::VFS::Handle::forget_cache and
+  Gnome2::VFS::make_uri_from_input_with_trailing_ws.
+
 Overview of changes in Gnome2-VFS 1.022
 =======================================
 

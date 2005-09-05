@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by the gtk2-perl team
+ * Copyright (C) 2003-2005 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.10 2005/03/08 17:07:36 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.11 2005/03/20 23:44:44 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -195,6 +195,20 @@ gnome_vfs_mime_get_default_application (mime_type)
     CLEANUP:
 	gnome_vfs_mime_application_free (RETVAL);
 
+#if VFS_CHECK_VERSION (2, 10, 0)
+
+##  GnomeVFSMimeApplication *gnome_vfs_mime_get_default_application_for_uri (const char *uri, const char *mime_type);
+GnomeVFSMimeApplication *
+gnome_vfs_mime_get_default_application_for_uri (mime_type, uri)
+	GnomeVFSMimeType *mime_type
+	const char *uri
+    C_ARGS:
+	uri, mime_type
+    CLEANUP:
+	gnome_vfs_mime_application_free (RETVAL);
+
+#endif
+
 # FIXME: Needs bonobo typemaps.
 ###  Bonobo_ServerInfo * gnome_vfs_mime_get_default_component (const char *mime_type) 
 #Bonobo_ServerInfo *
@@ -246,6 +260,26 @@ gnome_vfs_mime_get_all_applications (mime_type)
 
 	/* gnome_vfs_mime_application_list_free (applications); */
 	g_list_free (applications);
+
+#if VFS_CHECK_VERSION (2, 10, 0)
+
+##  GList * gnome_vfs_mime_get_all_applications_for_uri (const char *uri, const char *mime_type);
+void
+gnome_vfs_mime_get_all_applications_for_uri (mime_type, uri)
+	GnomeVFSMimeType *mime_type
+	const char *uri
+    PREINIT:
+	GList *i, *applications;
+    PPCODE:
+	applications = gnome_vfs_mime_get_all_applications_for_uri (uri, mime_type);
+
+	for (i = applications; i != NULL; i = i->next)
+		XPUSHs (sv_2mortal (newSVGnomeVFSMimeApplication (i->data)));
+
+	/* gnome_vfs_mime_application_list_free (applications); */
+	g_list_free (applications);
+
+#endif
 
 # FIXME: Needs bonobo typemaps.
 ###  GList * gnome_vfs_mime_get_all_components (const char *mime_type) 
@@ -479,6 +513,19 @@ gnome_vfs_mime_application_new_from_id (class, id)
     CLEANUP:
 	gnome_vfs_mime_application_free (RETVAL);
 
+#if VFS_CHECK_VERSION (2, 10, 0)
+
+##  GnomeVFSMimeApplication *gnome_vfs_mime_application_new_from_desktop_id (const char *id);
+GnomeVFSMimeApplication *
+gnome_vfs_mime_application_new_from_desktop_id (class, id)
+	const char *id
+    C_ARGS:
+	id
+    CLEANUP:
+	gnome_vfs_mime_application_free (RETVAL);
+
+#endif
+
 ##  GnomeVFSMimeApplication *gnome_vfs_mime_application_copy (GnomeVFSMimeApplication *application) 
 
 ##  void gnome_vfs_mime_application_free (GnomeVFSMimeApplication *application) 
@@ -506,7 +553,7 @@ gnome_vfs_mime_application_launch (app, ...)
 	g_list_free (uris);
     OUTPUT:
 	RETVAL
-	
+
 # FIXME: leak?
 ##  GnomeVFSResult gnome_vfs_mime_application_launch_with_env (GnomeVFSMimeApplication *app, GList *uris, char **envp) 
 GnomeVFSResult
@@ -527,6 +574,32 @@ gnome_vfs_mime_application_launch_with_env (app, uri_ref, env_ref)
 	g_list_free (uris);
     OUTPUT:
 	RETVAL
+
+#endif
+
+#if VFS_CHECK_VERSION (2, 10, 0)
+
+const char *gnome_vfs_mime_application_get_desktop_id (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_desktop_file_path (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_name (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_generic_name (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_icon (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_exec (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_binary_name (GnomeVFSMimeApplication *app);
+
+gboolean gnome_vfs_mime_application_supports_uris (GnomeVFSMimeApplication *app);
+
+gboolean gnome_vfs_mime_application_requires_terminal (GnomeVFSMimeApplication *app);
+
+gboolean gnome_vfs_mime_application_supports_startup_notification (GnomeVFSMimeApplication *app);
+
+const char *gnome_vfs_mime_application_get_startup_wm_class (GnomeVFSMimeApplication *app);
 
 #endif
 

@@ -4,10 +4,10 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.13 2004/07/29 17:36:03 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.15 2005/05/29 14:45:04 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 46) :
+  (tests => 48) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -77,9 +77,16 @@ is_deeply([$handle -> tell()], ["ok", 6]);
 is($handle -> seek("start", 2), "ok");
 is_deeply([$handle -> read(4)], ["ok", 4, "aaa!"]);
 
-is($handle -> close(), "ok");
+is($handle -> truncate(0), "error-not-supported");
 
-# FIXME: warn $handle -> truncate(3);
+SKIP: {
+  skip "forget_cache is new in 2.12", 1
+    unless Gnome2::VFS -> CHECK_VERSION(2, 11, 0); # FIXME: 2.12.
+
+  is($handle -> forget_cache(0, 0), "ok");
+}
+
+is($handle -> close(), "ok");
 
 ###############################################################################
 

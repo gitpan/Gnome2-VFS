@@ -1,10 +1,10 @@
-2005/06/23	kaffeetisch
+2005/09/05	kaffeetisch
 
-	* META.yml, NEWS, VFS.pm: Stable release 1.022.
+	* MANIFEST, META.yml: Remove META.yml.
 
-2005/06/23	kaffeetisch
+	* NEWS, VFS.pm: Stable release 1.040.
 
-	Merge from HEAD:
+2005/06/22	kaffeetisch
 
 	* t/GnomeVFSFileInfo.t: Use is() instead of is_deeply() to test
 	flags values since the latter was changed to always use the string
@@ -12,22 +12,76 @@
 	whereas the former seems to work correctly.  Tested with
 	Test::More 0.45 and 0.60.
 
-	* Makefile.PL: Specify PREREQ_PM in the WriteMakefile call so
-	META.yml gets generated correctly.
-
-	* MANIFEST, examples/monitor.pl: Add simple example of a monitor.
+2005/06/06	kaffeetisch
 
 	* MANIFEST, genmaps.pl: Retire genmaps.pl.
 
-2005/04/11	kaffeetisch
+	* MANIFEST, META.yml, NEWS, VFS.pm: Unstable release 1.031.
 
-	* META.yml, NEWS, VFS.pm: Stable release 1.021.
+2005/05/29	kaffeetisch
 
-2005/04/11	kaffeetisch
+	* Makefile.PL: Specify PREREQ_PM in the WriteMakefile call so
+	META.yml gets generated correctly.
 
-	Merge from HEAD:
+	* t/GnomeVFSOps.t: Fix the forget_cache test.  Add a truncate
+	test.
 
-	* VFS.pm: Documentation fixes.
+	* t/GnomeVFSXfer.t: This seems to work again, so get rid of the
+	skip_all.
+
+	* xs/GnomeVFSUtils.xs: Fix
+	gnome_vfs_make_uri_from_input_with_trailing_ws by adding the class
+	argument.
+
+2005/05/08	borup
+
+	* Added examples/monitor.pl: simple example of a monitor.
+
+2005/04/25	kaffeetisch
+
+	* META.yml, NEWS, VFS.pm: Unstable release 1.030.
+
+2005/04/25	kaffeetisch
+
+	* t/GnomeVFSFileInfo.t: The Test::More bug has been fixed, remove
+	the TODO block.
+
+	* t/GnomeVFSXfer.t: Completely skip this test for now since it's
+	failing.
+
+	* t/GnomeVFSOps.t, xs/GnomeVFSOps.xs: Bind and test
+	gnome_vfs_forget_cache.
+
+	* t/GnomeVFSUtils.t, xs/GnomeVFSUtils.xs: Bind and test
+	gnome_vfs_make_uri_from_input_with_trailing_ws.
+
+2005/04/17	kaffeetisch
+
+	* META.yml, NEWS, VFS.pm: Merge from stable-1-02.
+
+2005/03/21	kaffeetisch
+
+	* VFS.pm, t/GnomeVFS.t: Export the following constants on demand
+	(@EXPORT_OK): GNOME_VFS_PRIORITY_MIN, GNOME_VFS_PRIORITY_MAX,
+	GNOME_VFS_PRIORITY_DEFAULT, GNOME_VFS_SIZE_FORMAT_STR,
+	GNOME_VFS_OFFSET_FORMAT_STR, GNOME_VFS_MIME_TYPE_UNKNOWN,
+	GNOME_VFS_URI_MAGIC_STR, and GNOME_VFS_URI_PATH_STR.
+
+	* xs/GnomeVFSMime.xs, t/GnomeVFSMime: Bind
+	gnome_vfs_mime_get_default_application_for_uri,
+	gnome_vfs_mime_get_all_applications_for_uri,
+	gnome_vfs_mime_application_new_from_desktop_id,
+	gnome_vfs_mime_application_get_desktop_id,
+	gnome_vfs_mime_application_get_desktop_file_path,
+	gnome_vfs_mime_application_get_name,
+	gnome_vfs_mime_application_get_generic_name,
+	gnome_vfs_mime_application_get_icon,
+	gnome_vfs_mime_application_get_exec,
+	gnome_vfs_mime_application_get_binary_name,
+	gnome_vfs_mime_application_supports_uris,
+	gnome_vfs_mime_application_requires_terminal,
+	gnome_vfs_mime_application_supports_startup_notification, and
+	gnome_vfs_mime_application_get_startup_wm_class.
 
 2005/03/16	kaffeetisch
 

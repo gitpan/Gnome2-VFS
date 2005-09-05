@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.15 2005/03/08 17:07:37 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.17 2005/05/29 14:45:04 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -252,6 +252,17 @@ gnome_vfs_make_uri_from_input_with_dirs (class, uri, dirs)
 	GnomeVFSMakeURIDirs dirs
     C_ARGS:
 	uri, dirs
+
+#endif
+
+#if VFS_CHECK_VERSION (2, 11, 0) /* FIXME: 2.12. */
+
+##  char * gnome_vfs_make_uri_from_input_with_trailing_ws (const char *location);
+char_own *
+gnome_vfs_make_uri_from_input_with_trailing_ws (class, location)
+	const char *location
+    C_ARGS:
+	location
 
 #endif
 
