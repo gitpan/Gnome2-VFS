@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.31 2005/09/05 19:07:15 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.32 2005/09/17 19:41:55 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -26,7 +26,7 @@ our @EXPORT_OK = qw(
 
 # --------------------------------------------------------------------------- #
 
-our $VERSION = '1.040';
+our $VERSION = '1.041';
 
 sub import {
   my ($self) = @_;

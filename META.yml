@@ -1,14 +1,13 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Gnome2-VFS
-version:      1.040
+version:      1.041
 version_from: VFS.pm
 installdirs:  site
 requires:
     ExtUtils::Depends:             0.20
     ExtUtils::PkgConfig:           1.03
-    Glib:                          1.06
-    Gtk2:                          1.02
+    Glib:                          1.100
 
 distribution_type: module
 generated_by: ExtUtils::MakeMaker version 6.30

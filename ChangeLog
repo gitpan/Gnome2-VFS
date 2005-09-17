@@ -1,3 +1,10 @@
+2005/09/17	kaffeetisch
+
+	* Makefile.PL: Get rid of the Gtk2 dependency by using
+	Glib::CodeGen instead of Gtk2::CodeGen.
+
+	* NEWS, README, VFS.pm: Stable release 1.041.
+
 2005/09/05	kaffeetisch
 
 	* MANIFEST, META.yml: Remove META.yml.

@@ -30,6 +30,5 @@ Gnome2::VFS depends on:
 
   ExtUtils::Depends >= 0.20
   ExtUtils::PkgConfig >= 1.03
-  Glib >= 1.060
-  Gtk2 >= 1.020
+  Glib >= 1.100
   libgnomevfs >= 2.0.0
