@@ -4,10 +4,10 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSXfer.t,v 1.7 2005/05/29 14:45:04 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSXfer.t,v 1.8 2006/03/12 22:07:08 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 68) :
+  (tests => 11) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -26,7 +26,8 @@ unless (-e TMP) {
 my $progress = sub {
   my ($info) = @_;
 
-  isa_ok($info, "HASH");
+  my $done_that = 0 if 0;
+  isa_ok($info, "HASH") unless $done_that++;
 
   if ($info -> { status } eq "ok") {
     return 1;

@@ -4,10 +4,10 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSMime,v 1.8 2005/03/20 23:44:44 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSMime,v 1.10 2006/01/30 19:14:44 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 16) :
+  (tests => 20) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -29,9 +29,8 @@ SKIP: {
   ok(defined($application -> { id }));
   isa_ok($application -> { supported_uri_schemes }, "ARRAY");
 
-  ok(Gnome2::VFS::Mime -> id_in_application_list("epiphany", $application, $application));
-  isa_ok(Gnome2::VFS::Mime -> remove_application_from_list("galeon", $application, $application), "Gnome2::VFS::Mime::Application");
-  is(Gnome2::VFS::Mime -> id_list_from_application_list($application), "epiphany");
+  ok(Gnome2::VFS::Mime -> id_in_application_list("firefox.desktop", $application, $application));
+  is(Gnome2::VFS::Mime -> id_list_from_application_list($application), "firefox.desktop");
 
   # is($application -> launch("http://gtk2-perl.sf.net"), "ok");
   # is($application -> launch_with_env(["http://gtk2-perl.sf.net"], [map { "$_=" . $ENV{ $_ } } (keys(%ENV))]), "ok");
@@ -41,11 +40,8 @@ SKIP: {
   isa_ok(($type -> get_all_applications_for_uri("http://www.google.com"))[0], "Gnome2::VFS::Mime::Application");
 }
 
-TODO: {
-  local $TODO = "hrm";
-  isa_ok(Gnome2::VFS::Mime::Application -> new_from_id("epiphany"), "Gnome2::VFS::Mime::Application");
-  isa_ok(Gnome2::VFS::Mime::Application -> new_from_desktop_id("epiphany"), "Gnome2::VFS::Mime::Application");
-}
+isa_ok(Gnome2::VFS::Mime::Application -> new_from_id("firefox.desktop"), "Gnome2::VFS::Mime::Application");
+isa_ok(Gnome2::VFS::Mime::Application -> new_from_desktop_id("firefox.desktop"), "Gnome2::VFS::Mime::Application");
 
 # $type -> get_icon();
 # $type -> set_icon(...);
@@ -74,17 +70,18 @@ TODO: {
 # is($type -> get_default_action_type(), "none");
 
 ok(defined Gnome2::VFS -> get_mime_type("/usr/bin/perl"));
+ok(defined Gnome2::VFS -> get_slow_mime_type("/usr/bin/perl"), "slow mime type");
 is(Gnome2::VFS -> get_mime_type_for_data("<html></html>"), "text/html");
+is(Gnome2::VFS -> get_mime_type_for_name("foo.html"), "text/html");
+is(Gnome2::VFS -> get_mime_type_for_name_and_data("foo.html", "<html></html>"), "text/html");
 
-SKIP: {
-  skip("get_all_desktop_entries and get_default_desktop_entry are new in 2.8", 4)
-    unless (Gnome2::VFS -> CHECK_VERSION(2, 8, 0));
+ok(defined $type -> get_all_desktop_entries());
+ok(defined $type -> get_default_desktop_entry());
 
-  is($type -> get_all_desktop_entries(), undef);
-  is($type -> get_default_desktop_entry(), undef);
-
+TODO: {
+  local $TODO = "hmm";
   is($type -> get_equivalence($type), "identical");
-  is($type -> is_equal($type), 1);
+  ok($type -> is_equal($type));
 }
 
 ###############################################################################

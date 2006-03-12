@@ -4,7 +4,7 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.15 2005/05/29 14:45:04 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSOps.t,v 1.16 2005/09/28 14:04:32 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 48) :
@@ -81,7 +81,7 @@ is($handle -> truncate(0), "error-not-supported");
 
 SKIP: {
   skip "forget_cache is new in 2.12", 1
-    unless Gnome2::VFS -> CHECK_VERSION(2, 11, 0); # FIXME: 2.12.
+    unless Gnome2::VFS -> CHECK_VERSION(2, 12, 0);
 
   is($handle -> forget_cache(0, 0), "ok");
 }

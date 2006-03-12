@@ -6,7 +6,7 @@ use Cwd qw(cwd);
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.16 2005/04/25 17:31:02 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.17 2005/09/28 14:04:32 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 31) :
@@ -55,7 +55,7 @@ SKIP: {
 
 SKIP: {
   skip("make_uri_from_input_with_trailing_ws is new in 2.12.0", 1)
-    unless (Gnome2::VFS -> CHECK_VERSION(2, 11, 0)); # FIXME: 2.12.
+    unless (Gnome2::VFS -> CHECK_VERSION(2, 12, 0));
 
   ok(defined(Gnome2::VFS -> make_uri_from_input_with_trailing_ws("file:///tmp")));
 }

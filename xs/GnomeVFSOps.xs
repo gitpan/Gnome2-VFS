@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.21 2005/04/25 17:31:02 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSOps.xs,v 1.22 2005/09/28 14:04:32 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -323,7 +323,7 @@ gnome_vfs_truncate (handle, length)
     OUTPUT:
 	RETVAL
 
-#if VFS_CHECK_VERSION (2, 11, 0) /* FIXME: 2.12. */
+#if VFS_CHECK_VERSION (2, 12, 0)
 
 GnomeVFSResult gnome_vfs_forget_cache (GnomeVFSHandle *handle, GnomeVFSFileOffset offset, GnomeVFSFileSize size);
 

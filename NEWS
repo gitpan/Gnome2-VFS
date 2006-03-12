@@ -1,3 +1,30 @@
+Overview of changes in Gnome2-VFS 1.060
+=======================================
+
+ Since 1.04x (the previous stable series)
+ ----------------------------------------
+  * Add Gnome2::VFS::Address::equal, Gnome2::VFS::Address::match and
+  Gnome2::VFS::get_slow_mime_type.
+  * Add Gnome2::VFS::get_mime_type_for_name and
+  Gnome2::VFS::get_mime_type_for_name_and_data.
+
+ Since 1.031
+ -----------
+  * Make the Gnome2::VFS::Xfer test more robust.
+
+Overview of changes in Gnome2-VFS 1.051
+=======================================
+
+* Add Gnome2::VFS::get_mime_type_for_name and
+  Gnome2::VFS::get_mime_type_for_name_and_data.
+
+Overview of changes in Gnome2-VFS 1.050
+=======================================
+
+* Fix a test suite issue.
+* Add Gnome2::VFS::Address::equal, Gnome2::VFS::Address::match and
+  Gnome2::VFS::get_slow_mime_type.
+
 Overview of changes in Gnome2-VFS 1.041
 =======================================
 

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSAddress.xs,v 1.1 2004/07/29 17:36:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSAddress.xs,v 1.2 2005/12/12 18:52:39 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -46,3 +46,11 @@ gnome_vfs_address_to_string (address)
 ##  Not really usable from Perl, are they?
 ##  GnomeVFSAddress *gnome_vfs_address_new_from_sockaddr (struct sockaddr *sa, int len)
 ##  struct sockaddr *gnome_vfs_address_get_sockaddr (GnomeVFSAddress *address, guint16 port, int *len)
+
+#if VFS_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+
+gboolean gnome_vfs_address_equal (const GnomeVFSAddress *a, const GnomeVFSAddress *b);
+
+gboolean gnome_vfs_address_match (const GnomeVFSAddress *a, const GnomeVFSAddress *b, guint prefix);
+
+#endif

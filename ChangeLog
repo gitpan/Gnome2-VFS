@@ -1,3 +1,54 @@
+2006/03/12	kaffeetisch
+
+	* Makefile.PL, NEWS, README, VFS.pm: Stable release 1.060.
+
+2006/03/12	kaffeetisch
+
+	* t/GnomeVFSXfer.t: Make this test not depend on the exact number
+	of times the progress callback is invoked.
+
+2006/01/30	kaffeetisch
+
+	* Makefile.PL, NEWS, VFS.pm: Unstable release 1.051.
+
+2006/01/30	kaffeetisch
+
+	* t/GnomeVFSMime, xs/GnomeVFSMime.xs: Wrap
+	gnome_vfs_get_mime_type_for_name and
+	gnome_vfs_get_mime_type_for_name_and_data.
+
+2005/12/13	rwmcfa1
+
+	* t/GoneVFSAddress.t: skip equal and match tests unless version is >
+	2.13.1
+
+2005/12/12	kaffeetisch
+
+	* NEWS, VFS.pm: Unstable release 1.050.
+
+2005/12/12	kaffeetisch
+
+	* t/GnomeVFSAddress.t, xs/GnomeVFSAddress.xs: Wrap
+	gnome_vfs_address_equal and gnome_vfs_address_match.
+
+	* t/GnomeVFSMime, xs/GnomeVFSMime.xs: Wrap
+	gnome_vfs_get_slow_mime_type.
+
+2005/10/08	kaffeetisch
+
+	* t/GnomeVFSFileInfo.t: Use is_deeply() or the >= operator on
+	flags values.
+
+2005/09/28	kaffeetisch
+
+	* t/GnomeVFSOps.t, t/GnomeVFSUtils.t, xs/GnomeVFSOps.xs,
+	xs/GnomeVFSUtils.xs: Make all version checks refer to stable
+	releases.
+
+2005/09/17	rwmcfa1
+
+	* perl-Gnome2-VFS.spec.in: remove Gtk2 build and run-time deps.
+
 2005/09/17	kaffeetisch
 
 	* Makefile.PL: Get rid of the Gtk2 dependency by using

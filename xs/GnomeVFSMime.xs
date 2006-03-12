@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.11 2005/03/20 23:44:44 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.13 2006/01/30 19:14:44 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -25,7 +25,7 @@
 
 /* ------------------------------------------------------------------------- */
 
-/*
+#if 0
 
 struct Bonobo_ServerInfo_type
 {
@@ -53,7 +53,7 @@ newSVGnomeVFSMimeAction (GnomeVFSMimeAction *action)
 	...
 }
 
-*/
+#endif
 
 /* ------------------------------------------------------------------------- */
 
@@ -636,7 +636,7 @@ gnome_vfs_mime_monitor_get (class)
 # --------------------------------------------------------------------------- #
 
 MODULE = Gnome2::VFS::Mime	PACKAGE = Gnome2::VFS	PREFIX = gnome_vfs_
- 
+
 ##  char *gnome_vfs_get_mime_type (const char *text_uri)
 char_own *
 gnome_vfs_get_mime_type (class, text_uri)
@@ -656,3 +656,36 @@ gnome_vfs_get_mime_type_for_data (class, data)
 	RETVAL = gnome_vfs_get_mime_type_for_data (real_data, data_size);
     OUTPUT:
 	RETVAL
+
+#if VFS_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+
+# char * gnome_vfs_get_slow_mime_type (const char *text_uri);
+char_own * gnome_vfs_get_slow_mime_type (class, const char *text_uri)
+    C_ARGS:
+	text_uri
+
+#endif
+
+#if VFS_CHECK_VERSION (2, 13, 4) /* FIXME: 2.14 */
+
+# const char * gnome_vfs_get_mime_type_for_name (const char *filename);
+const char *
+gnome_vfs_get_mime_type_for_name (class, const char *filename)
+    C_ARGS:
+	filename
+
+# const char * gnome_vfs_get_mime_type_for_name_and_data (const char *filename, gconstpointer data, gssize data_size);
+const char *
+gnome_vfs_get_mime_type_for_name_and_data (class, filename, data)
+	const char *filename
+	SV *data
+    PREINIT:
+	STRLEN data_size;
+	gconstpointer real_data;
+    CODE:
+	real_data = SvPV (data, data_size);
+	RETVAL = gnome_vfs_get_mime_type_for_name_and_data (filename, real_data, data_size);
+    OUTPUT:
+	RETVAL
+
+#endif

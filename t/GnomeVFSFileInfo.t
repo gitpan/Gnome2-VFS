@@ -6,7 +6,7 @@ use Cwd qw(cwd);
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSFileInfo.t,v 1.10 2005/06/22 17:36:06 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSFileInfo.t,v 1.11 2005/10/08 13:58:59 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 12) :
@@ -39,8 +39,8 @@ is($info -> get_mime_type(), $info -> { mime_type });
 
 is($info -> { name }, $0);
 is($info -> { type }, "regular");
-is($info -> { permissions }, [qw(user-read user-write)]);
-is($info -> { flags }, "local");
+is_deeply(\@{ $info -> { permissions } }, [qw(user-read user-write)]);
+ok($info -> { flags } >= ["local"]);
 is($info -> { size }, 23);
 is($info -> { mime_type }, "text/plain");
 
