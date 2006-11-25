@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.13 2006/01/30 19:14:44 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.14 2006/10/03 15:46:55 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -636,6 +636,9 @@ gnome_vfs_mime_monitor_get (class)
 # --------------------------------------------------------------------------- #
 
 MODULE = Gnome2::VFS::Mime	PACKAGE = Gnome2::VFS	PREFIX = gnome_vfs_
+
+=for object Gnome2::VFS::Mime
+=cut
 
 ##  char *gnome_vfs_get_mime_type (const char *text_uri)
 char_own *

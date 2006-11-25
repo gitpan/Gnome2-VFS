@@ -1,13 +1,14 @@
 #!/usr/bin/perl -w
 use strict;
+use Glib qw(TRUE FALSE);
 use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSDirectory.t,v 1.7 2004/06/28 18:00:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSDirectory.t,v 1.8 2006/09/01 15:39:56 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 26) :
+  (tests => 38) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -57,11 +58,11 @@ my $callback = sub {
   is($info -> { name }, $node);
   ok($will_loop == 0 || $will_loop == 1);
 
-  return (0, 1);
+  return (TRUE, FALSE);
 };
 
-Gnome2::VFS -> create(TMP . "/bla", "write", 1, 0644);
-Gnome2::VFS -> create(TMP . "/blu", "write", 1, 0644);
+Gnome2::VFS -> create(TMP . "/bla", "write", TRUE, 0644);
+Gnome2::VFS -> create(TMP . "/blu", "write", TRUE, 0644);
 
 is(Gnome2::VFS::Directory -> visit(TMP,
                                    qw(default),

@@ -1,3 +1,10 @@
+Overview of changes in Gnome2-VFS 1.061
+=======================================
+
+* Fix a test failure.
+* Fix a POD error that caused the main documentation in the Gnome2::VFS POD
+  page to be shadowed.
+
 Overview of changes in Gnome2-VFS 1.060
 =======================================
 
