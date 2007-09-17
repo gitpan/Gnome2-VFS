@@ -1,3 +1,25 @@
+2007-09-16	kaffeetisch
+
+	* VFS.pm
+	* NEWS: Stable release 1.080.
+
+2007-07-08	kaffeetisch
+
+	* MANIFEST.SKIP
+	* NEWS
+	* VFS.pm
+	* copyright.pod: Unstable release 1.070.
+
+2007-07-08	kaffeetisch
+
+	* t/GnomeVFSURI.t
+	* xs/GnomeVFSURI.xs: Wrap gnome_vfs_uri_resolve_symbolic_link.
+
+	* t/GnomeVFSDrive
+	* xs/GnomeVFSDrive.xs: Wrap gnome_vfs_drive_needs_eject.
+
+	* xs/GnomeVFSMime.xs: Correct a comment and a version check.
+
 2006-11-25	kaffeetisch
 
 	* NEWS, VFS.pm: Stable release 1.061.

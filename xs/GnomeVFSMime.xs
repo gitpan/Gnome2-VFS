@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.14 2006/10/03 15:46:55 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.15 2007/07/08 17:49:20 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -317,7 +317,7 @@ gnome_vfs_mime_set_icon (mime_type, filename)
 	GnomeVFSMimeType *mime_type
 	const char *filename
 
-##  GnomeVFSResult gnome_vfs_mime_get_description (const char *mime_type) 
+##  const char * gnome_vfs_mime_get_description (const char *mime_type) 
 const char *
 gnome_vfs_mime_get_description (mime_type)
 	GnomeVFSMimeType *mime_type
@@ -660,16 +660,12 @@ gnome_vfs_get_mime_type_for_data (class, data)
     OUTPUT:
 	RETVAL
 
-#if VFS_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+#if VFS_CHECK_VERSION (2, 14, 0)
 
 # char * gnome_vfs_get_slow_mime_type (const char *text_uri);
 char_own * gnome_vfs_get_slow_mime_type (class, const char *text_uri)
     C_ARGS:
 	text_uri
-
-#endif
-
-#if VFS_CHECK_VERSION (2, 13, 4) /* FIXME: 2.14 */
 
 # const char * gnome_vfs_get_mime_type_for_name (const char *filename);
 const char *

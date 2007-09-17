@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.36 2006/11/25 14:32:05 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/VFS.pm,v 1.38 2007/09/16 17:42:09 kaffeetisch Exp $
 
 package Gnome2::VFS;
 
@@ -26,7 +26,7 @@ our @EXPORT_OK = qw(
 
 # --------------------------------------------------------------------------- #
 
-our $VERSION = '1.061';
+our $VERSION = '1.080';
 
 sub import {
   my ($self) = @_;
@@ -181,7 +181,7 @@ Torsten Schoenfeld E<lt>kaffeetisch@web.deE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+Copyright (C) 2003-2007 by the gtk2-perl team (see the file AUTHORS)
 
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free

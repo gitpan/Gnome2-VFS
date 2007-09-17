@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSDrive.xs,v 1.3 2005/03/07 21:16:43 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSDrive.xs,v 1.4 2007/07/08 17:49:20 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -150,3 +150,9 @@ gnome_vfs_drive_get_hal_udi (drive)
 	GnomeVFSDrive *drive
 
 #endif /* 2.8 */
+
+#if VFS_CHECK_VERSION (2, 16, 0)
+
+gboolean gnome_vfs_drive_needs_eject (GnomeVFSDrive *drive);
+
+#endif

@@ -5,10 +5,10 @@ use Gnome2::VFS;
 use Config;
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.10 2005/03/07 21:16:45 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSURI.t,v 1.11 2007/07/08 17:49:20 kaffeetisch Exp $
 
 plan -d "$ENV{ HOME }/.gnome" ?
-  (tests => 29) :
+  (tests => 30) :
   (skip_all => "You have no ~/.gnome");
 
 Gnome2::VFS -> init();
@@ -91,6 +91,13 @@ foreach (Gnome2::VFS::URI -> list_parse("file:///usr/bin/python\nfile:///usr/bin
 ###############################################################################
 
 is(Gnome2::VFS::URI -> make_full_from_relative("/usr/bin/", "perl"), "/usr/bin/perl");
+
+SKIP: {
+  skip '2.16 stuff', 1
+    unless Gnome2::VFS -> CHECK_VERSION(2, 16, 0);
+
+  isa_ok($uri -> resolve_symbolic_link('tmp'), 'Gnome2::VFS::URI');
+}
 
 ###############################################################################
 

@@ -1,3 +1,21 @@
+Overview of changes in Gnome2-VFS 1.080
+=======================================
+
+ Since 1.06x (the previous stable series)
+ ----------------------------------------
+  * Add Gnome2::VFS::URI::resolve_symbolic_link and
+    Gnome2::VFS::Drive::needs_eject.
+
+ Since 1.070
+ -----------
+  * Nothing.
+
+Overview of changes in Gnome2-VFS 1.070
+=======================================
+
+* Add Gnome2::VFS::URI::resolve_symbolic_link.
+* Add Gnome2::VFS::Drive::needs_eject.
+
 Overview of changes in Gnome2-VFS 1.061
 =======================================
 

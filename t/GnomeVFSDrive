@@ -4,7 +4,7 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSDrive,v 1.2 2005/03/07 21:16:44 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSDrive,v 1.3 2007/07/08 17:49:20 kaffeetisch Exp $
 
 unless (-d "$ENV{ HOME }/.gnome") {
   plan(skip_all => "You have no ~/.gnome");
@@ -14,7 +14,7 @@ unless (Gnome2::VFS -> CHECK_VERSION(2, 6, 0)) {
   plan(skip_all => "This is new in 2.6");
 }
 
-plan(tests => 12);
+plan(tests => 13);
 
 Gnome2::VFS -> init();
 
@@ -55,6 +55,8 @@ SKIP: {
 # use Gtk2 -init;
 # Glib::Timeout -> add(1000, sub { Gtk2 -> main_quit(); 0; });
 # Gtk2 -> main();
+
+ok(!$drive -> needs_eject());
 
 ###############################################################################
 

@@ -11,3 +11,4 @@ Makefile\.old$
 \.spec$
 \.sw.$
 \.tar\.gz$
+xs/.+\.c$
