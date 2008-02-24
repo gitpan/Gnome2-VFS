@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.15 2007/07/08 17:49:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.16 2008/02/24 15:27:19 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -192,8 +192,6 @@ gnome_vfs_mime_get_default_action_type (mime_type)
 GnomeVFSMimeApplication *
 gnome_vfs_mime_get_default_application (mime_type)
 	GnomeVFSMimeType *mime_type
-    CLEANUP:
-	gnome_vfs_mime_application_free (RETVAL);
 
 #if VFS_CHECK_VERSION (2, 10, 0)
 
@@ -204,8 +202,6 @@ gnome_vfs_mime_get_default_application_for_uri (mime_type, uri)
 	const char *uri
     C_ARGS:
 	uri, mime_type
-    CLEANUP:
-	gnome_vfs_mime_application_free (RETVAL);
 
 #endif
 
@@ -504,14 +500,17 @@ gnome_vfs_mime_is_equal (a, b)
 
 MODULE = Gnome2::VFS::Mime	PACKAGE = Gnome2::VFS::Mime::Application	PREFIX = gnome_vfs_mime_application_
 
+void
+DESTROY (GnomeVFSMimeApplication *application)
+    CODE:
+	gnome_vfs_mime_application_free (application);
+
 ##  GnomeVFSMimeApplication *gnome_vfs_mime_application_new_from_id (const char *id) 
 GnomeVFSMimeApplication *
 gnome_vfs_mime_application_new_from_id (class, id)
 	const char *id
     C_ARGS:
 	id
-    CLEANUP:
-	gnome_vfs_mime_application_free (RETVAL);
 
 #if VFS_CHECK_VERSION (2, 10, 0)
 
@@ -521,14 +520,8 @@ gnome_vfs_mime_application_new_from_desktop_id (class, id)
 	const char *id
     C_ARGS:
 	id
-    CLEANUP:
-	gnome_vfs_mime_application_free (RETVAL);
 
 #endif
-
-##  GnomeVFSMimeApplication *gnome_vfs_mime_application_copy (GnomeVFSMimeApplication *application) 
-
-##  void gnome_vfs_mime_application_free (GnomeVFSMimeApplication *application) 
 
 #if VFS_CHECK_VERSION (2, 4, 0)
 

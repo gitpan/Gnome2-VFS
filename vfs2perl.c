@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.c,v 1.4 2005/03/08 17:07:13 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.c,v 1.5 2008/02/24 15:27:16 kaffeetisch Exp $
  */
 
 #include "vfs2perl.h"
@@ -338,7 +338,6 @@ newSVGnomeVFSXferProgressInfo (GnomeVFSXferProgressInfo *info)
 
 /* ------------------------------------------------------------------------- */
 
-/* FIXME: leak? */
 SV *
 newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application)
 {
@@ -346,6 +345,10 @@ newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application)
 
 	if (application == NULL)
 		return &PL_sv_undef;
+
+#if VFS_CHECK_VERSION (2, 10, 0)
+	sv_magic ((SV *) hash, 0, PERL_MAGIC_ext, (const char *) application, 0);
+#endif
 
 	hv_store (hash, "id", 2, newSVpv (application->id, PL_na), 0);
 	hv_store (hash, "name", 4, newSVpv (application->name, PL_na), 0);
@@ -364,16 +367,22 @@ newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application)
 		hv_store (hash, "supported_uri_schemes", 21, newRV_noinc ((SV *) array), 0);
 	}
 
-	/* gnome_vfs_mime_application_free (application); */
-
 	return sv_bless (newRV_noinc ((SV *) hash),
 	                 gv_stashpv ("Gnome2::VFS::Mime::Application", 1));
 }
 
-/* FIXME: leak? */
 GnomeVFSMimeApplication *
 SvGnomeVFSMimeApplication (SV *object)
 {
+#if VFS_CHECK_VERSION (2, 10, 0)
+	GnomeVFSMimeApplication *application;
+	MAGIC *mg;
+
+	if (!object || !SvOK (object) || !SvROK (object) || !(mg = mg_find (SvRV (object), PERL_MAGIC_ext)))
+		return NULL;
+
+	application = (GnomeVFSMimeApplication *) mg->mg_ptr;
+#else
 	GnomeVFSMimeApplication *application = gperl_alloc_temp (sizeof (GnomeVFSMimeApplication));
 
 	if (object && SvOK (object) && SvROK (object) && SvTYPE (SvRV (object)) == SVt_PVHV) {
@@ -413,6 +422,7 @@ SvGnomeVFSMimeApplication (SV *object)
 			}
 		}
 	}
+#endif
 
 	return application;
 }

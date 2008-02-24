@@ -1,25 +1,24 @@
 ChangeLog
-LICENSE
-MANIFEST			This list of files
-MANIFEST.SKIP
-Makefile.PL
-NEWS
-README
-VFS.pm
 copyright.pod
 doctypes
 examples/downloader.pl
 examples/monitor.pl
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+MANIFEST.SKIP
 maps-2.0
 maps-2.6
 maps-2.8
+NEWS
 perl-Gnome2-VFS.spec.in
+README
 t/GnomeVFS.t
 t/GnomeVFSAddress.t
 t/GnomeVFSApplicationRegistry
 t/GnomeVFSAsync
-t/GnomeVFSDNSSD
 t/GnomeVFSDirectory.t
+t/GnomeVFSDNSSD
 t/GnomeVFSDrive
 t/GnomeVFSFileInfo.t
 t/GnomeVFSMime
@@ -30,6 +29,7 @@ t/GnomeVFSUtils.t
 t/GnomeVFSVolume
 t/GnomeVFSVolumeMonitor
 t/GnomeVFSXfer.t
+VFS.pm
 vfs.typemap
 vfs2perl.c
 vfs2perl.h
@@ -37,8 +37,8 @@ xs/GnomeVFS.xs
 xs/GnomeVFSAddress.xs
 xs/GnomeVFSApplicationRegistry.xs
 xs/GnomeVFSAsync.xs
-xs/GnomeVFSDNSSD.xs
 xs/GnomeVFSDirectory.xs
+xs/GnomeVFSDNSSD.xs
 xs/GnomeVFSDrive.xs
 xs/GnomeVFSFileInfo.xs
 xs/GnomeVFSInit.xs

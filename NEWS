@@ -1,3 +1,8 @@
+Overview of changes in Gnome2-VFS 1.081
+=======================================
+
+* Fix the GnomeVFSMimeApplication handling on libgnomevfs >= 2.10.
+
 Overview of changes in Gnome2-VFS 1.080
 =======================================
 
