@@ -5,7 +5,7 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSDirectory.t,v 1.8 2006/09/01 15:39:56 kaffeetisch Exp $
+# $Id$
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 38) :

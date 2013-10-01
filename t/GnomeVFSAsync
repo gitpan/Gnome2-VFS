@@ -5,7 +5,7 @@ use Gnome2::VFS;
 use Cwd qw(cwd);
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSAsync,v 1.10 2004/08/15 21:03:08 kaffeetisch Exp $
+# $Id$
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 135) :

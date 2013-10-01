@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSUtils.xs,v 1.18 2005/09/28 14:04:32 kaffeetisch Exp $
+ * $Id$
  */
 
 #include "vfs2perl.h"
@@ -104,7 +104,7 @@ gnome_vfs_escape_set (class, string, match_set)
 	string, match_set
 
 ##  char *gnome_vfs_unescape_string (const char *escaped_string, const char *illegal_characters) 
-char_own *
+gchar_own *
 gnome_vfs_unescape_string (class, escaped_string, illegal_characters=NULL)
 	const char *escaped_string
 	const char *illegal_characters
@@ -133,7 +133,7 @@ gnome_vfs_expand_initial_tilde (class, path)
 	path
 
 ##  char *gnome_vfs_unescape_string_for_display (const char *escaped) 
-char_own *
+gchar_own *
 gnome_vfs_unescape_string_for_display (class, escaped)
 	const char *escaped
     C_ARGS:
@@ -228,7 +228,7 @@ gnome_vfs_read_entire_file (class, uri)
 			   : newSVsv (&PL_sv_undef)));
 
 ##  char * gnome_vfs_format_uri_for_display (const char *uri) 
-char_own *
+gchar_own *
 gnome_vfs_format_uri_for_display (class, uri)
 	const char *uri
     C_ARGS:

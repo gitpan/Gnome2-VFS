@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.h,v 1.19 2005/03/08 17:07:13 kaffeetisch Exp $
+ * $Id$
  */
 
 #ifndef _VFS2PERL_H_

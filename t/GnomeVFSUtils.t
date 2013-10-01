@@ -1,12 +1,13 @@
 #!/usr/bin/perl -w
 use strict;
+use utf8;
 use Gnome2::VFS;
 
 use Cwd qw(cwd);
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSUtils.t,v 1.17 2005/09/28 14:04:32 kaffeetisch Exp $
+# $Id$
 
 plan -d "$ENV{ HOME }/.gnome" ?
   (tests => 31) :
@@ -27,8 +28,8 @@ SKIP: {
   skip("escape_string, format_uri_for_display, gnome_vfs_make_uri_from_input, make_uri_canonical_strip_fragment, uris_match, get_uri_scheme and make_uri_from_shell_arg are new in 2.2.0", 13)
     unless (Gnome2::VFS -> CHECK_VERSION(2, 2, 0));
 
-  is(Gnome2::VFS -> escape_string('%$�'), '%25%24%A7');
-  is(Gnome2::VFS -> format_uri_for_display("/usr/bin/perl"), "/usr/bin/perl");
+  is(Gnome2::VFS -> escape_string('%$§äöü'), '%25%24%C2%A7%C3%A4%C3%B6%C3%BC');
+  is(Gnome2::VFS -> format_uri_for_display("/usr/bin/äöü"), "/usr/bin/äöü");
   is(Gnome2::VFS -> make_uri_from_input("gtk2-perl.sf.net"), "http://gtk2-perl.sf.net");
   is(Gnome2::VFS -> make_uri_canonical_strip_fragment("http://gtk2-perl.sf.net#bla"), "http://gtk2-perl.sf.net");
   ok(Gnome2::VFS -> uris_match("http://gtk2-perl.sf.net", "http://gtk2-perl.sf.net"));
@@ -60,10 +61,10 @@ SKIP: {
   ok(defined(Gnome2::VFS -> make_uri_from_input_with_trailing_ws("file:///tmp")));
 }
 
-foreach (Gnome2::VFS -> escape_path_string('%$�'),
-         Gnome2::VFS -> escape_host_and_path_string('%$�')) {
-  is($_, '%25%24%A7');
-  is(Gnome2::VFS -> unescape_string($_), '%$�');
+foreach (Gnome2::VFS -> escape_path_string('%$§äöü'),
+         Gnome2::VFS -> escape_host_and_path_string('%$§äöü')) {
+  is($_, '%25%24%C2%A7%C3%A4%C3%B6%C3%BC');
+  is(Gnome2::VFS -> unescape_string($_), '%$§äöü');
 }
 
 is(Gnome2::VFS -> escape_slashes("/%/"), "%2F%25%2F");

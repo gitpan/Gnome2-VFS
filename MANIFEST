@@ -1,4 +1,4 @@
-ChangeLog
+ChangeLog.pre-git
 copyright.pod
 doctypes
 examples/downloader.pl
@@ -11,6 +11,7 @@ maps-2.0
 maps-2.6
 maps-2.8
 NEWS
+perl-Gnome2-VFS.doap
 perl-Gnome2-VFS.spec.in
 README
 t/GnomeVFS.t
@@ -53,4 +54,5 @@ xs/GnomeVFSXfer.xs
 xs_files-2.0
 xs_files-2.6
 xs_files-2.8
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

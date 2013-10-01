@@ -4,7 +4,7 @@ use Gnome2::VFS;
 
 use Test::More;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/t/GnomeVFSAddress.t,v 1.4 2005/12/14 02:46:13 rwmcfa1 Exp $
+# $Id$
 
 unless (-d "$ENV{ HOME }/.gnome") {
   plan(skip_all => "You have no ~/.gnome");

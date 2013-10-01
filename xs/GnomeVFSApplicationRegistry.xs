@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by the gtk2-perl team
+ * Copyright (C) 2003, 2013 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSApplicationRegistry.xs,v 1.9 2005/03/08 17:07:36 kaffeetisch Exp $
+ * $Id$
  */
 
 #include "vfs2perl.h"
@@ -62,7 +62,7 @@ gnome_vfs_application_registry_get_applications (class, mime_type=NULL)
     PPCODE:
 	results = gnome_vfs_application_registry_get_applications (mime_type);
 	for (i = results; i != NULL; i = i->next)
-		XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+		XPUSHs (sv_2mortal (newSVpv (i->data, 0)));
 	g_list_free (results);
 
 MODULE = Gnome2::VFS::ApplicationRegistry	PACKAGE = Gnome2::VFS::Application	PREFIX = gnome_vfs_application_registry_
@@ -86,7 +86,7 @@ gnome_vfs_application_registry_get_keys (app_id)
     PPCODE:
 	results = gnome_vfs_application_registry_get_keys (app_id);
 	for (i = results; i != NULL; i = i->next)
-		XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+		XPUSHs (sv_2mortal (newSVpv (i->data, 0)));
 	g_list_free (results);
 
 ##  const char *gnome_vfs_application_registry_peek_value (const char *app_id, const char *key)
@@ -154,7 +154,7 @@ gnome_vfs_application_registry_get_mime_types (app_id)
     PPCODE:
 	results = gnome_vfs_application_registry_get_mime_types (app_id);
 	for (i = results; i != NULL; i = i->next)
-		XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+		XPUSHs (sv_2mortal (newSVpv (i->data, 0)));
 	g_list_free (results);
 
 ##  gboolean gnome_vfs_application_registry_supports_mime_type (const char *app_id, const char *mime_type) 

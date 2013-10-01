@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSDrive.xs,v 1.4 2007/07/08 17:49:20 kaffeetisch Exp $
+ * $Id$
  */
 
 #include "vfs2perl.h"

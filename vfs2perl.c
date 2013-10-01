@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by the gtk2-perl team
+ * Copyright (C) 2003, 2013 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/vfs2perl.c,v 1.5 2008/02/24 15:27:16 kaffeetisch Exp $
+ * $Id$
  */
 
 #include "vfs2perl.h"
@@ -232,7 +232,7 @@ newSVGnomeVFSFileInfo (GnomeVFSFileInfo *info)
 	HV *object = newHV ();
 
 	if (info && info->name && info->valid_fields) {
-		hv_store (object, "name", 4, newSVpv (info->name, PL_na), 0);
+		hv_store (object, "name", 4, newSVpv (info->name, 0), 0);
 		hv_store (object, "valid_fields", 12, newSVGnomeVFSFileInfoFields (info->valid_fields), 0);
 
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_TYPE, "type", newSVGnomeVFSFileType (info->type));
@@ -247,8 +247,8 @@ newSVGnomeVFSFileInfo (GnomeVFSFileInfo *info)
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_ATIME, "atime", newSViv (info->atime));
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_MTIME, "mtime", newSViv (info->mtime));
 		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_CTIME, "ctime", newSViv (info->ctime));
-		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_SYMLINK_NAME, "symlink_name", newSVpv (info->symlink_name, PL_na));
-		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE, "mime_type", newSVpv (info->mime_type, PL_na));
+		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_SYMLINK_NAME, "symlink_name", newSVpv (info->symlink_name, 0));
+		VFS2PERL_CHECK_AND_STORE (GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE, "mime_type", newSVpv (info->mime_type, 0));
 
 		/* FIXME: what about GNOME_VFS_FILE_INFO_FIELDS_ACCESS? */
 	}
@@ -350,9 +350,9 @@ newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application)
 	sv_magic ((SV *) hash, 0, PERL_MAGIC_ext, (const char *) application, 0);
 #endif
 
-	hv_store (hash, "id", 2, newSVpv (application->id, PL_na), 0);
-	hv_store (hash, "name", 4, newSVpv (application->name, PL_na), 0);
-	hv_store (hash, "command", 7, newSVpv (application->command, PL_na), 0);
+	hv_store (hash, "id", 2, newSVpv (application->id, 0), 0);
+	hv_store (hash, "name", 4, newSVpv (application->name, 0), 0);
+	hv_store (hash, "command", 7, newSVpv (application->command, 0), 0);
 	hv_store (hash, "can_open_multiple_files", 23, newSVuv (application->can_open_multiple_files), 0);
 	hv_store (hash, "expects_uris", 12, newSVGnomeVFSMimeApplicationArgumentType (application->expects_uris), 0);
 	hv_store (hash, "requires_terminal", 17, newSVuv (application->requires_terminal), 0);
@@ -362,7 +362,7 @@ newSVGnomeVFSMimeApplication (GnomeVFSMimeApplication *application)
 		GList *i;
 
 		for (i = application->supported_uri_schemes; i != NULL; i = i->next)
-			av_push (array, newSVpv (i->data, PL_na));
+			av_push (array, newSVpv (i->data, 0));
 
 		hv_store (hash, "supported_uri_schemes", 21, newRV_noinc ((SV *) array), 0);
 	}

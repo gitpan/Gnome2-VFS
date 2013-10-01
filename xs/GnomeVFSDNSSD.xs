@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004 by the gtk2-perl team
+ * Copyright (C) 2004, 2013 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSDNSSD.xs,v 1.1 2004/07/29 17:36:03 kaffeetisch Exp $
+ * $Id$
  */
 
 #include "vfs2perl.h"
@@ -29,11 +29,11 @@ newSVGnomeVFSDNSSDService (GnomeVFSDNSSDService *service)
 	HV *hv = newHV ();
 
 	if (service->name)
-		hv_store (hv, "name", 4, newSVpv (service->name, PL_na), 0);
+		hv_store (hv, "name", 4, newSVpv (service->name, 0), 0);
 	if (service->type)
-		hv_store (hv, "type", 4, newSVpv (service->type, PL_na), 0);
+		hv_store (hv, "type", 4, newSVpv (service->type, 0), 0);
 	if (service->domain)
-		hv_store (hv, "domain", 6, newSVpv (service->domain, PL_na), 0);
+		hv_store (hv, "domain", 6, newSVpv (service->domain, 0), 0);
 
 	return newRV_noinc ((SV *) hv);
 }
@@ -45,7 +45,7 @@ hash_table_foreach (char *key, char *value, HV *hv)
 {
 	if (key)
 		hv_store (hv, key, strlen (key),
-		          value ? newSVpv (value, PL_na) : &PL_sv_undef, 0);
+		          value ? newSVpv (value, 0) : &PL_sv_undef, 0);
 }
 
 static SV *
@@ -90,7 +90,7 @@ vfs2perl_dns_sd_resolve_callback (GnomeVFSDNSSDResolveHandle *handle,
 	PUSHs (sv_2mortal (newSVGnomeVFSDNSSDResolveHandle (handle)));
 	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
 	PUSHs (sv_2mortal (newSVGnomeVFSDNSSDService ((GnomeVFSDNSSDService *) service)));
-	PUSHs (host ? sv_2mortal (newSVpv (host, PL_na)) : &PL_sv_undef);
+	PUSHs (host ? sv_2mortal (newSVpv (host, 0)) : &PL_sv_undef);
 	PUSHs (sv_2mortal (newSViv (port)));
 	PUSHs (sv_2mortal (newSVGnomeVFSDNSSDResolveHashTable ((GHashTable *) text)));
 	PUSHs (text_raw ? sv_2mortal (newSVpv (text_raw, text_raw_len)) : &PL_sv_undef);
@@ -245,7 +245,7 @@ gnome_vfs_dns_sd_resolve_sync (class, name, type, domain, timeout_msec)
 
 	EXTEND (sp, 5);
 	PUSHs (sv_2mortal (newSVGnomeVFSResult (result)));
-	PUSHs (host ? sv_2mortal (newSVpv (host, PL_na)) : &PL_sv_undef);
+	PUSHs (host ? sv_2mortal (newSVpv (host, 0)) : &PL_sv_undef);
 	PUSHs (sv_2mortal (newSViv (port)));
 	PUSHs (sv_2mortal (newSVGnomeVFSDNSSDResolveHashTable (text)));
 	PUSHs (text_raw ? sv_2mortal (newSVpv (text_raw, text_raw_len)) : &PL_sv_undef);
@@ -273,7 +273,7 @@ gnome_vfs_dns_sd_list_browse_domains_sync (class, domain, timeout_msec)
 	if (result == GNOME_VFS_OK) {
 		for (i = domains; i; i = i->next) {
 			if (i->data) {
-				XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+				XPUSHs (sv_2mortal (newSVpv (i->data, 0)));
 				g_free (i->data);
 			}
 		}
@@ -299,7 +299,7 @@ gnome_vfs_get_default_browse_domains (class)
 
 	for (i = domains; i; i = i->next) {
 		if (i->data) {
-			XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+			XPUSHs (sv_2mortal (newSVpv (i->data, 0)));
 			g_free (i->data);
 		}
 	}

@@ -5,6 +5,8 @@ blib
 build
 CVS
 \.cvsignore$
+\.git
+\.gitignore$
 Makefile$
 Makefile\.old$
 \.o$
@@ -13,3 +15,4 @@ Makefile\.old$
 \.tar\.gz$
 xs/.+\.c$
 \.releaserc$
+MYMETA\.*

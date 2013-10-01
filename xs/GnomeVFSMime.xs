@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2005 by the gtk2-perl team
+ * Copyright (C) 2003-2005, 2013 by the gtk2-perl team
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gnome2-VFS/xs/GnomeVFSMime.xs,v 1.16 2008/02/24 15:27:19 kaffeetisch Exp $
+ * $Id$
  */
 
 #include "vfs2perl.h"
@@ -137,7 +137,7 @@ gnome_vfs_mime_id_list_from_application_list (class, ...)
 	ids = gnome_vfs_mime_id_list_from_application_list (applications);
 
 	for (j = ids; j != NULL; j = j->next) {
-		XPUSHs (sv_2mortal (newSVpv (j->data, PL_na)));
+		XPUSHs (sv_2mortal (newSVpv (j->data, 0)));
 		/* g_free (j->data); */
 	}
 
@@ -462,7 +462,7 @@ gnome_vfs_mime_get_all_desktop_entries (mime_type)
 
 	for (i = result; i; i = i->next) {
 		if (i->data) {
-			XPUSHs (sv_2mortal (newSVpv (i->data, PL_na)));
+			XPUSHs (sv_2mortal (newSVpv (i->data, 0)));
 			g_free (i->data);
 		}
 	}

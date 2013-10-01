@@ -1,3 +1,10 @@
+Overview of changes in Gnome2-VFS 1.082
+=======================================
+
+* Avoid misusing the macro PL_na, thus preventing issues when Gnome2::VFS is
+  used in conjunction with certain XS modules, among them XML::Parser and
+  String::Approx.
+
 Overview of changes in Gnome2-VFS 1.081
 =======================================
 
